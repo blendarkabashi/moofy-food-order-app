@@ -23,9 +23,13 @@ export default function Home() {
   return (
     <main className="p-6 bg-gray-100 shadow-lg h-full">
       <h1 className="text-3xl font-bold mb-4 text-black">Order Your Food</h1>
-      <div className="grid grid-cols-2 gap-6 items-start justify-between">
-        <FoodOrderForm menuState={menuState} cart={cart} setCart={setCart} />
-        <OrderSummary order={cart} submitOrder={submitOrder} />
+      <div className="flex items-start justify-between">
+        <div className="w-[60%]">
+          <FoodOrderForm menuState={menuState} cart={cart} setCart={setCart} />
+        </div>
+        <div className="relative w-[40%] ml-[25px]">
+          <OrderSummary order={cart} submitOrder={submitOrder} />
+        </div>
       </div>
     </main>
   );
