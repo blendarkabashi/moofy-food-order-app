@@ -4,6 +4,7 @@ import { useState } from "react";
 import FoodOrderForm from "./components/FoodOrderForm";
 import OrderSummary from "./components/OrderSummary";
 import { menuData } from "./data/globals";
+import { sendOrderEmail } from "../utils/email";
 
 export default function Home() {
   const [menuState, setMenuState] = useState(menuData);
@@ -20,9 +21,23 @@ export default function Home() {
   const tax = subtotal * 0.06;
   const grandTotal = subtotal + gratuity + tax;
 
-  const submitOrder = async (fullName, email, phone) => {
+  const goToOverview = async (fullName, email, phone) => {
     setView(2);
     setUser({ fullName, email, phone });
+  };
+
+  const submitOrder = async () => {
+    try {
+      await sendOrderEmail(user, cart, {
+        subtotal,
+        gratuity,
+        tax,
+        grandTotal,
+      });
+      alert("Order submitted! Check your email for confirmation.");
+    } catch (error) {
+      alert("Failed to submit order. Please try again.");
+    }
   };
 
   return (
@@ -46,7 +61,7 @@ export default function Home() {
               />
             </div>
             <div className="relative w-[40%] ml-[25px]">
-              <OrderSummary order={cart} submitOrder={submitOrder} />
+              <OrderSummary order={cart} goToOverview={goToOverview} />
             </div>
           </div>
         </>
@@ -127,6 +142,12 @@ export default function Home() {
             <span>Grand Total:</span>
             <span>${grandTotal.toFixed(2)}</span>
           </div>
+          <button
+            className={`cursor-pointer w-full bg-blue-600 py-2 mt-6 rounded-lg text-white font-semibold hover:bg-blue-700 transition`}
+            onClick={() => submitOrder()}
+          >
+            Submit Order
+          </button>
         </div>
       )}
     </main>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function OrderSummary({ order, submitOrder }) {
+export default function OrderSummary({ order, goToOverview }) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -138,7 +138,7 @@ export default function OrderSummary({ order, submitOrder }) {
         className={`${
           isButtonDisabled && "opacity-60 pointer-events-none"
         } cursor-pointer w-full bg-blue-600 py-2 mt-6 rounded-lg text-white font-semibold hover:bg-blue-700 transition`}
-        onClick={() => submitOrder(fullName, email, phone)}
+        onClick={() => goToOverview(fullName, email, phone)}
         disabled={isButtonDisabled}
       >
         Checkout & Review
