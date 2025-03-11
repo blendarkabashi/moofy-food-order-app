@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function OrderSummary({ order, submitOrder }) {
   const [fullName, setFullName] = useState("");
@@ -6,6 +6,13 @@ export default function OrderSummary({ order, submitOrder }) {
   const [phone, setPhone] = useState("");
   const [emailError, setEmailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+
+  useEffect(() => {
+    const isFormValid =
+      fullName && email && phone && !emailError && !phoneError;
+    setIsButtonDisabled(!isFormValid || order.length === 0);
+  }, [fullName, email, phone, emailError, phoneError, order]);
 
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -129,10 +136,10 @@ export default function OrderSummary({ order, submitOrder }) {
 
       <button
         className={`${
-          (emailError || phoneError) && "opacity-60 pointer-events-none"
+          isButtonDisabled && "opacity-60 pointer-events-none"
         } cursor-pointer w-full bg-blue-600 py-2 mt-6 rounded-lg text-white font-semibold hover:bg-blue-700 transition`}
-        onClick={() => submitOrder({ fullName, email, phone })}
-        disabled={emailError || phoneError}
+        onClick={() => submitOrder(fullName, email, phone)}
+        disabled={isButtonDisabled}
       >
         Checkout & Review
       </button>
