@@ -37,6 +37,13 @@ export default function OrderSummary({ order, goToOverview }) {
     return order.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
+  const formatCurrency = (value) => {
+    return new Intl.NumberFormat("en-US", {
+      style: "currency",
+      currency: "USD",
+    }).format(value);
+  };
+
   const subtotal = order ? calculateSubtotal(order) : 0;
   const gratuity = subtotal * 0.2;
   const tax = subtotal * 0.06;
@@ -56,7 +63,7 @@ export default function OrderSummary({ order, goToOverview }) {
               <span className="text-gray-500">x{item.quantity}</span>
             </span>
             <span className="font-medium">
-              ${(item.price * item.quantity).toFixed(2)}
+              {formatCurrency(item.price * item.quantity)}
             </span>
           </div>
         ))}
@@ -67,15 +74,15 @@ export default function OrderSummary({ order, goToOverview }) {
       <div className="space-y-2 text-gray-700">
         <div className="flex justify-between">
           <span>Subtotal:</span>
-          <span className="font-medium">${subtotal.toFixed(2)}</span>
+          <span className="font-medium">{formatCurrency(subtotal)}</span>
         </div>
         <div className="flex justify-between">
           <span>Gratuity (20%):</span>
-          <span className="font-medium">${gratuity.toFixed(2)}</span>
+          <span className="font-medium">{formatCurrency(gratuity)}</span>
         </div>
         <div className="flex justify-between">
           <span>Tax (6%):</span>
-          <span className="font-medium">${tax.toFixed(2)}</span>
+          <span className="font-medium">{formatCurrency(tax)}</span>
         </div>
       </div>
 
@@ -83,7 +90,7 @@ export default function OrderSummary({ order, goToOverview }) {
 
       <div className="flex justify-between text-xl font-bold text-gray-900">
         <span>Grand Total:</span>
-        <span>${grandTotal.toFixed(2)}</span>
+        <span>{formatCurrency(grandTotal)}</span>
       </div>
 
       <div className="mt-6 gap-6 grid grid-cols-2">

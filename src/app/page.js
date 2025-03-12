@@ -5,12 +5,19 @@ import FoodOrderForm from "./components/FoodOrderForm";
 import OrderSummary from "./components/OrderSummary";
 import { menuData } from "./data/globals";
 import { sendOrderEmail } from "../utils/email";
+const formatCurrency = (value) => {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+  }).format(value);
+};
 
 export default function Home() {
   const [menuState, setMenuState] = useState(menuData);
   const [cart, setCart] = useState([]);
   const [view, setView] = useState(1);
   const [user, setUser] = useState();
+  const [numberOfPeople, setNumberOfPeople] = useState(0);
 
   const calculateSubtotal = (order) => {
     return order.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -62,9 +69,9 @@ export default function Home() {
                             .map(
                               (item) => `
                                 <li style="margin-bottom: 5px;">
-                                  ${item.name} x${item.quantity} - $${(
-                                item.price * item.quantity
-                              ).toFixed(2)}
+                                  ${item.name} x${
+                                item.quantity
+                              } - ${formatCurrency(item.price * item.quantity)}
                                 </li>
                               `
                             )
@@ -81,13 +88,13 @@ export default function Home() {
   
         <hr style="border-top: 1px solid #ddd; margin: 20px 0;">
         <div style="font-size: 16px;">
-          <p><strong>Subtotal:</strong> $${subtotal.toFixed(2)}</p>
-          <p><strong>Gratuity (20%):</strong> $${gratuity.toFixed(2)}</p>
-          <p><strong>Tax (6%):</strong> $${tax.toFixed(2)}</p>
+          <p><strong>Subtotal:</strong> ${formatCurrency(subtotal)}</p>
+          <p><strong>Gratuity (20%):</strong> ${formatCurrency(gratuity)}</p>
+          <p><strong>Tax (6%):</strong> ${formatCurrency(tax)}</p>
         </div>
         <hr style="border-top: 1px solid #ddd; margin: 20px 0;">
         <div style="font-size: 18px; font-weight: bold;">
-          <p><strong>Grand Total:</strong> $${grandTotal.toFixed(2)}</p>
+          <p><strong>Grand Total:</strong> ${formatCurrency(grandTotal)}</p>
         </div>
       </div>
     `;
@@ -129,6 +136,28 @@ export default function Home() {
             <br />
             <br />
             *All pricing is based per/person.
+            <div className="mt-6">
+              <div>
+                <label className="block mb-1 text-gray-700 text-sm font-medium">
+                  Enter the number of people you are ordering for
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  value={numberOfPeople}
+                  onChange={(e) => {
+                    const value =
+                      parseInt(e.target.value.replace(/^0+/, "")) || 0;
+                    setNumberOfPeople(Math.max(0, value));
+                  }}
+                  onInput={(e) => {
+                    e.target.value = e.target.value.replace(/^0+/, "");
+                  }}
+                  className="p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  placeholder="Enter the number of people"
+                />
+              </div>
+            </div>
           </div>
           <div className="flex items-start justify-between">
             <div className="w-[60%]">
@@ -136,6 +165,7 @@ export default function Home() {
                 menuState={menuState}
                 cart={cart}
                 setCart={setCart}
+                numberOfPeople={numberOfPeople}
               />
             </div>
             <div className="relative w-[40%] ml-[25px]">
@@ -192,7 +222,7 @@ export default function Home() {
                                 </span>
                               </span>
                               <span className="font-medium">
-                                ${(item.price * item.quantity).toFixed(2)}
+                                {formatCurrency(item.price * item.quantity)}
                               </span>
                             </div>
                           ))}
@@ -209,21 +239,21 @@ export default function Home() {
           <div className="space-y-2">
             <div className="flex justify-between">
               <span>Subtotal:</span>
-              <span className="font-medium">${subtotal.toFixed(2)}</span>
+              <span className="font-medium">{formatCurrency(subtotal)}</span>
             </div>
             <div className="flex justify-between">
               <span>Gratuity (20%):</span>
-              <span className="font-medium">${gratuity.toFixed(2)}</span>
+              <span className="font-medium">{formatCurrency(gratuity)}</span>
             </div>
             <div className="flex justify-between">
               <span>Tax (6%):</span>
-              <span className="font-medium">${tax.toFixed(2)}</span>
+              <span className="font-medium">{formatCurrency(tax)}</span>
             </div>
           </div>
           <hr className="my-4 border-gray-300" />
           <div className="flex justify-between text-xl font-bold text-gray-900">
             <span>Grand Total:</span>
-            <span>${grandTotal.toFixed(2)}</span>
+            <span>{formatCurrency(grandTotal)}</span>
           </div>
           <button
             className={`cursor-pointer w-full bg-blue-600 py-2 mt-6 rounded-lg text-white font-semibold hover:bg-blue-700 transition`}

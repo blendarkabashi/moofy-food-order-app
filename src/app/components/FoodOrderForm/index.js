@@ -1,6 +1,11 @@
 import { useEffect, useState } from "react";
 
-export default function FoodOrderForm({ menuState, cart, setCart }) {
+export default function FoodOrderForm({
+  menuState,
+  cart,
+  setCart,
+  numberOfPeople,
+}) {
   const [mealSelected, setMealSelected] = useState([]);
 
   const updateQuantity = (dayId, mealId, item, isAddon, newQuantity) => {
@@ -40,6 +45,50 @@ export default function FoodOrderForm({ menuState, cart, setCart }) {
       return [...prevCart, cartItem];
     });
   };
+
+  useEffect(() => {
+    if (!numberOfPeople || numberOfPeople < 1) return;
+
+    setCart((prevCart) => {
+      let updatedCart = [...prevCart];
+
+      mealSelected.forEach(({ dayId, mealId }) => {
+        const selectedMeal = menuState
+          .find((day) => day.id === dayId)
+          ?.meals.find((meal) => meal.id === mealId);
+
+        if (!selectedMeal) return;
+
+        selectedMeal.items.forEach((item) => {
+          const existingItemIndex = updatedCart.findIndex(
+            (cartItem) =>
+              cartItem.dayId === dayId &&
+              cartItem.mealId === mealId &&
+              cartItem.itemId === item.id &&
+              !cartItem.isAddon
+          );
+
+          const newCartItem = {
+            dayId,
+            mealId,
+            itemId: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: numberOfPeople,
+            isAddon: false,
+          };
+
+          if (existingItemIndex !== -1) {
+            updatedCart[existingItemIndex] = newCartItem;
+          } else {
+            updatedCart.push(newCartItem);
+          }
+        });
+      });
+
+      return updatedCart;
+    });
+  }, [numberOfPeople, mealSelected]);
 
   const getItemQuantity = (dayId, mealId, itemId, isAddon) => {
     const cartItem = cart.find(
