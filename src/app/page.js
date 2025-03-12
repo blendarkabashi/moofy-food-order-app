@@ -28,7 +28,7 @@ export default function Home() {
   const generateOrderEmail = () => {
     return `
       <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 700px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
-        <h1 style="font-size: 24px; font-weight: bold; color: #333;">New Order</h1>
+        <h1 style="font-size: 24px; font-weight: bold; color: #333;">New Order for Moofy</h1>
         <div style="margin-bottom: 20px;">
           <p><strong>Client Full Name:</strong> ${user.fullName}</p>
           <p><strong>Client Email:</strong> ${user.email}</p>
@@ -104,7 +104,7 @@ export default function Home() {
         htmlContent: emailContent,
       });
 
-      alert("Order submitted! Check your email for confirmation.");
+      setView(3);
     } catch (error) {
       alert("Failed to submit order. Please try again.");
     }
@@ -143,7 +143,7 @@ export default function Home() {
             </div>
           </div>
         </>
-      ) : (
+      ) : view == 2 ? (
         <div className="bg-white max-w-[700px] mx-auto p-6 border border-gray-200 rounded-lg text-sm text-black mb-6">
           <div className="mb-6">
             <a onClick={() => setView(1)} className="underline cursor-pointer">
@@ -231,6 +231,15 @@ export default function Home() {
           >
             Submit Order
           </button>
+        </div>
+      ) : (
+        <div className="bg-white max-w-[700px] mx-auto p-6 border border-gray-200 rounded-lg text-sm text-black mb-6">
+          <h1 className="text-3xl font-bold mb-4 text-black">
+            Thank you for your order!
+          </h1>
+          <p className="mt-2">
+            Someone from our team will be in touch with you shortly!
+          </p>
         </div>
       )}
     </main>
