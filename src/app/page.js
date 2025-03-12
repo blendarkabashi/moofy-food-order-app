@@ -34,7 +34,8 @@ export default function Home() {
   };
   const generateOrderEmail = () => {
     return `
-      <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 700px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
+    <body style="background: #f6f3f4; padding: 20px;">
+      <div style="font-family: Arial, sans-serif; background:white; padding: 20px; max-width: 700px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
         <h1 style="font-size: 24px; font-weight: bold; color: #333;">New Order for Moofy</h1>
         <div style="margin-bottom: 20px;">
           <p><strong>Client Full Name:</strong> ${user.fullName}</p>
@@ -97,6 +98,7 @@ export default function Home() {
           <p><strong>Grand Total:</strong> ${formatCurrency(grandTotal)}</p>
         </div>
       </div>
+      </body>
     `;
   };
 
@@ -270,6 +272,14 @@ export default function Home() {
           <p className="mt-2">
             Someone from our team will be in touch with you shortly!
           </p>
+          <div className="mt-6">
+            <a
+              className="underline cursor-pointer"
+              onClick={() => window.location.reload()}
+            >
+              Order Again
+            </a>
+          </div>
         </div>
       )}
     </main>
