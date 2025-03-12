@@ -119,6 +119,19 @@ export default function Home() {
     }
   };
 
+  const handleRemoveItem = (item) => {
+    setCart((prevCart) =>
+      prevCart.filter(
+        (cartItem) =>
+          !(
+            cartItem.dayId === item.dayId &&
+            cartItem.mealId === item.mealId &&
+            cartItem.itemId === item.itemId
+          )
+      )
+    );
+  };
+
   return (
     <main className="p-6 bg-gray-100 h-full">
       {view == 1 ? (
@@ -171,7 +184,11 @@ export default function Home() {
               />
             </div>
             <div className="relative w-[40%] ml-[25px]">
-              <OrderSummary order={cart} goToOverview={goToOverview} />
+              <OrderSummary
+                order={cart}
+                goToOverview={goToOverview}
+                onRemoveItem={handleRemoveItem}
+              />
             </div>
           </div>
         </>

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-export default function OrderSummary({ order, goToOverview }) {
+export default function OrderSummary({ order, goToOverview, onRemoveItem }) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -57,14 +57,23 @@ export default function OrderSummary({ order, goToOverview }) {
 
       <div className="space-y-3">
         {order?.map((item, index) => (
-          <div key={index} className="flex justify-between items-center">
+          <div key={index} className="flex justify-between items-center group">
             <span className="text-gray-700">
               {item.name}{" "}
               <span className="text-gray-500">x{item.quantity}</span>
             </span>
-            <span className="font-medium">
-              {formatCurrency(item.price * item.quantity)}
-            </span>
+            <div className="flex items-center">
+              <span className="font-medium mr-3">
+                {formatCurrency(item.price * item.quantity)}
+              </span>
+              <button
+                onClick={() => onRemoveItem(item)}
+                className="transition-opacity text-red-500 hover:text-red-700"
+                title="Remove item"
+              >
+                ✕
+              </button>
+            </div>
           </div>
         ))}
       </div>
