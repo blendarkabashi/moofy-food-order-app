@@ -25,15 +25,85 @@ export default function Home() {
     setView(2);
     setUser({ fullName, email, phone });
   };
+  const generateOrderEmail = () => {
+    return `
+      <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 700px; margin: auto; border: 1px solid #ddd; border-radius: 8px;">
+        <h1 style="font-size: 24px; font-weight: bold; color: #333;">New Order</h1>
+        <div style="margin-bottom: 20px;">
+          <p><strong>Client Full Name:</strong> ${user.fullName}</p>
+          <p><strong>Client Email:</strong> ${user.email}</p>
+          <p><strong>Client Phone number:</strong> ${user.phone}</p>
+        </div>
+  
+        ${menuData
+          .map((day) => {
+            const dayOrders = cart.filter((item) => item.dayId === day.id);
+            if (dayOrders.length === 0) return "";
+
+            return `
+              <div style="margin-bottom: 20px;">
+                <h2 style="font-size: 20px; font-weight: bold; margin-bottom: 10px;">${
+                  day.name
+                }</h2>
+                ${day.meals
+                  .map((meal) => {
+                    const mealOrders = dayOrders.filter(
+                      (item) => item.mealId === meal.id
+                    );
+                    if (mealOrders.length === 0) return "";
+
+                    return `
+                      <div style="border: 1px solid #ddd; padding: 15px; border-radius: 8px; margin-top: 10px;">
+                        <h3 style="font-size: 18px; font-weight: bold;">${meal.type.toUpperCase()} - ${
+                      meal.restaurant
+                    }</h3>
+                        <ul style="padding-left: 15px; margin-top: 10px;">
+                          ${mealOrders
+                            .map(
+                              (item) => `
+                                <li style="margin-bottom: 5px;">
+                                  ${item.name} x${item.quantity} - $${(
+                                item.price * item.quantity
+                              ).toFixed(2)}
+                                </li>
+                              `
+                            )
+                            .join("")}
+                        </ul>
+                      </div>
+                    `;
+                  })
+                  .join("")}
+              </div>
+            `;
+          })
+          .join("")}
+  
+        <hr style="border-top: 1px solid #ddd; margin: 20px 0;">
+        <div style="font-size: 16px;">
+          <p><strong>Subtotal:</strong> $${subtotal.toFixed(2)}</p>
+          <p><strong>Gratuity (20%):</strong> $${gratuity.toFixed(2)}</p>
+          <p><strong>Tax (6%):</strong> $${tax.toFixed(2)}</p>
+        </div>
+        <hr style="border-top: 1px solid #ddd; margin: 20px 0;">
+        <div style="font-size: 18px; font-weight: bold;">
+          <p><strong>Grand Total:</strong> $${grandTotal.toFixed(2)}</p>
+        </div>
+      </div>
+    `;
+  };
 
   const submitOrder = async () => {
     try {
+      const emailContent = generateOrderEmail();
       await sendOrderEmail(user, cart, {
         subtotal,
         gratuity,
         tax,
         grandTotal,
+        htmlContent: emailContent,
       });
+
       alert("Order submitted! Check your email for confirmation.");
     } catch (error) {
       alert("Failed to submit order. Please try again.");
@@ -41,7 +111,7 @@ export default function Home() {
   };
 
   return (
-    <main className="p-6 bg-gray-100 shadow-lg h-full">
+    <main className="p-6 bg-gray-100 h-full">
       {view == 1 ? (
         <>
           <div className="bg-white p-6 border border-gray-200 rounded-lg text-sm text-black mb-6">
@@ -74,7 +144,12 @@ export default function Home() {
           </div>
         </>
       ) : (
-        <div className="bg-white p-6 border border-gray-200 rounded-lg text-sm text-black mb-6">
+        <div className="bg-white max-w-[700px] mx-auto p-6 border border-gray-200 rounded-lg text-sm text-black mb-6">
+          <div className="mb-6">
+            <a onClick={() => setView(1)} className="underline cursor-pointer">
+              {"<"} Go back
+            </a>
+          </div>
           <h1 className="text-3xl font-bold mb-4 text-black">Your Order</h1>
           <div className="mb-6">
             <div>Full Name: {user.fullName}</div>

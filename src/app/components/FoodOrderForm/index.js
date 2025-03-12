@@ -162,9 +162,15 @@ export default function FoodOrderForm({ menuState, cart, setCart }) {
                                 meal.id,
                                 item,
                                 false,
-                                parseInt(e.target.value) || 0
+                                parseInt(e.target.value.replace(/^0+/, "")) || 0
                               )
                             }
+                            onInput={(e) => {
+                              e.target.value = e.target.value.replace(
+                                /^0+/,
+                                ""
+                              );
+                            }}
                             className="w-14 text-center bg-gray-100 border border-gray-300 px-2 py-1"
                           />
                           <button
@@ -241,9 +247,17 @@ export default function FoodOrderForm({ menuState, cart, setCart }) {
                                     meal.id,
                                     addon,
                                     true,
-                                    parseInt(e.target.value) || 0
+                                    parseInt(
+                                      e.target.value.replace(/^0+/, "")
+                                    ) || 0
                                   )
                                 }
+                                onInput={(e) => {
+                                  e.target.value = e.target.value.replace(
+                                    /^0+/,
+                                    ""
+                                  );
+                                }}
                                 className="w-14 text-center bg-gray-100 border border-gray-300 px-2 py-1"
                               />
                               <button
