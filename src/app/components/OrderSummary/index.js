@@ -69,7 +69,7 @@ export default function OrderSummary({ order, goToOverview }) {
         ))}
       </div>
 
-      <hr className="my-4 border-gray-300" />
+      {order?.length > 0 && <hr className="my-4 border-gray-300" />}
 
       <div className="space-y-2 text-gray-700">
         <div className="flex justify-between">
