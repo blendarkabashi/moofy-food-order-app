@@ -5,7 +5,6 @@ import FoodOrderForm from "./components/FoodOrderForm";
 import OrderSummary from "./components/OrderSummary";
 import { menuData } from "./data/globals";
 import { sendOrderEmail } from "../utils/email";
-import ReCAPTCHA from "react-google-recaptcha";
 const formatCurrency = (value) => {
   return new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -18,8 +17,6 @@ export default function Home() {
   const [cart, setCart] = useState([]);
   const [view, setView] = useState(1);
   const [user, setUser] = useState();
-  const [captcha, setCaptcha] = useState();
-
   const [numberOfPeople, setNumberOfPeople] = useState(0);
 
   const calculateSubtotal = (order) => {
@@ -107,18 +104,16 @@ export default function Home() {
 
   const submitOrder = async () => {
     try {
-      if (captcha) {
-        const emailContent = generateOrderEmail();
-        await sendOrderEmail(user, cart, {
-          subtotal,
-          gratuity,
-          tax,
-          grandTotal,
-          htmlContent: emailContent,
-        });
+      const emailContent = generateOrderEmail();
+      await sendOrderEmail(user, cart, {
+        subtotal,
+        gratuity,
+        tax,
+        grandTotal,
+        htmlContent: emailContent,
+      });
 
-        setView(3);
-      }
+      setView(3);
     } catch (error) {
       alert("Failed to submit order. Please try again.");
     }
@@ -279,16 +274,8 @@ export default function Home() {
             <span>Grand Total:</span>
             <span>{formatCurrency(grandTotal)}</span>
           </div>
-          <ReCAPTCHA
-            className=" mt-6"
-            sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_KEY}
-            onChange={setCaptcha}
-          />
           <button
-            disabled={!captcha}
-            className={`${
-              !captcha && "opacity-60 pointer-events-none"
-            } cursor-pointer w-full bg-blue-600 py-2 mt-6 rounded-lg text-white font-semibold hover:bg-blue-700 transition`}
+            className={`cursor-pointer w-full bg-blue-600 py-2 mt-6 rounded-lg text-white font-semibold hover:bg-blue-700 transition`}
             onClick={() => submitOrder()}
           >
             Submit Order
