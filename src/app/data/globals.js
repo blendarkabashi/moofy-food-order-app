@@ -1,10 +1,53 @@
 export const menuData = [
   {
     id: 0,
-    name: "Day - 1",
+    name: "Night - 1",
     meals: [
       {
         day_id: 0,
+        id: 2,
+        type: "Dinner",
+        restaurant: "🌮 The Omelette Chef (Fajita Station)",
+        items: [
+          {
+            id: 0,
+            name: "🌯 Grilled Chicken Steak & Veggie Fajitas",
+            price: 25,
+            quantity: 0,
+          },
+          {
+            id: 1,
+            name: "🌶️ Sauteed Bell Peppers, Onions & Tomatoes",
+            price: 0.0,
+            quantity: 0,
+          },
+          {
+            id: 2,
+            name: "🫘 Seasoned Black Beans & Spanish Rice",
+            price: 0.0,
+            quantity: 0,
+          },
+          {
+            id: 3,
+            name: "🍅 Shredded Lettuce, Diced Tomatoes, Cheddar Cheese, Sour Cream, Guacamole, Onions, Salsa",
+            price: 0.0,
+            quantity: 0,
+          },
+        ],
+        addons: [
+          { id: 0, name: "🥗 Caesar Salad", price: 3.0, quantity: 0 },
+          { id: 1, name: "🥗 Spinach Salad", price: 3.0, quantity: 0 },
+          { id: 2, name: "🥗 Antipasto Salad", price: 3.0, quantity: 0 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 1,
+    name: "Day - 1",
+    meals: [
+      {
+        day_id: 1,
         id: 0,
         type: "breakfast",
         restaurant: "🥯 Graul's Market",
@@ -16,6 +59,13 @@ export const menuData = [
             quantity: 0,
           },
           { id: 1, name: "🍓 Fresh Fruit Platter", price: 5.5, quantity: 0 },
+          {
+            id: 2,
+            name: "🥣 Assorted Cereals & Milk",
+            price: 3.0,
+            quantity: 0,
+          },
+          { id: 3, name: "☕️ Coffee Service", price: 3.5, quantity: 0 },
         ],
         addons: [
           { id: 0, name: "🥚 Hard-Boiled Eggs", price: 2.0, quantity: 0 },
@@ -26,97 +76,6 @@ export const menuData = [
             quantity: 0,
           },
           { id: 2, name: "🍯 Greek Yogurt & Granola", price: 3.5, quantity: 0 },
-        ],
-      },
-      {
-        day_id: 0,
-        id: 1,
-        type: "lunch",
-        restaurant: "🥯 Graul's Market",
-        items: [
-          {
-            id: 0,
-            name: "🥪 Party Finger Sandwiches",
-            price: 6.0,
-            quantity: 0,
-          },
-          { id: 1, name: "🥕 Gourmet Vegetable Tray", price: 6.0, quantity: 0 },
-        ],
-        addons: [
-          {
-            id: 0,
-            name: "🍤 Peeled and Deveined Shrimp Platter",
-            price: 8.0,
-            quantity: 0,
-          },
-          { id: 1, name: "🧀 Cheese & Fruit Platter", price: 4.5, quantity: 0 },
-          { id: 2, name: "🥙 Gourmet Cookie Tray", price: 4.0, quantity: 0 },
-        ],
-      },
-      {
-        day_id: 0,
-        id: 2,
-        type: "dinner",
-        restaurant: "🍝 The Spaghetti House",
-        items: [
-          { id: 0, name: "🍕 Stromboli Bites", price: 3.0, quantity: 0 },
-          { id: 1, name: "🍝 Lasagna Bolognese", price: 8.0, quantity: 0 },
-          { id: 2, name: "🥗 Caesar Salad", price: 4.5, quantity: 0 },
-          { id: 3, name: "🧄 Fettuccine Alfredo", price: 8.0, quantity: 0 },
-        ],
-        addons: [
-          {
-            id: 0,
-            name: "🍖 Meatballs in Marinara Sauce",
-            price: 6.0,
-            quantity: 0,
-          },
-          {
-            id: 1,
-            name: "🥬 Sautéed Spinach with Garlic",
-            price: 4.5,
-            quantity: 0,
-          },
-          {
-            id: 2,
-            name: "🌭 Mozzarella and Caprese Platter",
-            price: 5.5,
-            quantity: 0,
-          },
-          {
-            id: 3,
-            name: "🍗 Chicken Parmigiana Pan Catering",
-            description:
-              "Breaded chicken in marinara sauce & covered with cheese.",
-            price: 8.0,
-            quantity: 0,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: 1,
-    name: "Day - 2",
-    meals: [
-      {
-        day_id: 1,
-        id: 0,
-        type: "breakfast",
-        restaurant: "🍳 Bāgery",
-        items: [
-          {
-            id: 0,
-            name: "🥓 Breakfast Sandwich (Egg and Cheese)",
-            price: 6.0,
-            quantity: 0,
-          },
-          { id: 1, name: "🥔 Home Fries Bowl", price: 4.0, quantity: 0 },
-        ],
-        addons: [
-          { id: 0, name: "🥑 Avocado Slices", price: 3.5, quantity: 0 },
-          { id: 1, name: "🧁 Mini Blueberry Muffins", price: 3.0, quantity: 0 },
-          { id: 2, name: "🍓 Fruit Smoothie", price: 4.5, quantity: 0 },
         ],
       },
       {
@@ -158,65 +117,80 @@ export const menuData = [
         day_id: 1,
         id: 2,
         type: "dinner",
-        restaurant: "🍝 The Spaghetti House",
+        restaurant: "🍖 Rude Food Co.",
         items: [
-          { id: 0, name: "🍝 Rigatoni Amatriciana", price: 9.0, quantity: 0 },
-          { id: 1, name: "🍗 Chicken Parmesan", price: 10, quantity: 0 },
           {
-            id: 2,
-            name: "🥗 Chopped Salad",
-            description: "Served with house dressing.",
-            price: 5.0,
+            id: 0,
+            name: "🍖 Pulled Pork, Smoked Chicken, Chipped Brisket",
+            price: 25,
+            quantity: 0,
+          },
+          {
+            id: 1,
+            name: "🍖 Baked Beans & Collard Greens",
+            price: 0.0,
+            quantity: 0,
+          },
+          { id: 2, name: "🧀 Mac and Cheese", price: 0.0, quantity: 0 },
+          {
+            id: 3,
+            name: "🍞 Corn Bread & Dinner Rolls",
+            price: 0.0,
             quantity: 0,
           },
         ],
         addons: [
-          { id: 0, name: "🥣 Bruschetta Platter", price: 5.0, quantity: 0 },
+          {
+            id: 0,
+            name: "🥩 Upgrade to Sliced Brisket & Ribs",
+            price: 1.5,
+            quantity: 0,
+          },
           {
             id: 1,
-            name: "🥦 Roasted Italian Vegetables & Olives",
-            price: 5.0,
+            name: "🍗 Smoked Chicken Wings (per wing)",
+            price: 1.5,
             quantity: 0,
           },
-          { id: 2, name: "🍆 Side of Spinach", price: 5.0, quantity: 0 },
-          {
-            id: 3,
-            name: "🥦 Crispy Brussels Sprouts",
-            price: 5.0,
-            quantity: 0,
-          },
-          { id: 4, name: "🍰 Mini Cannolis", price: 4.0, quantity: 0 },
+          { id: 2, name: "🥗 House Salad", price: 3.0, quantity: 0 },
         ],
       },
     ],
   },
   {
     id: 2,
-    name: "Day - 3",
+    name: "Day - 2",
     meals: [
       {
         day_id: 2,
         id: 0,
         type: "breakfast",
-        restaurant: "🐟 Bāgery",
+        restaurant: "🥯 Graul's Market",
         items: [
-          { id: 0, name: "🥯 Salmon Bagel", price: 9.0, quantity: 0 },
-          { id: 1, name: "🍓 Fresh Fruit Cup", price: 3.0, quantity: 0 },
-        ],
-        addons: [
           {
             id: 0,
-            name: "🥒 Cucumber & Tomato Salad",
-            price: 3.5,
+            name: "🥯 Fresh Bagel with Cream Cheese",
+            price: 2.5,
             quantity: 0,
           },
-          { id: 1, name: "🥑 Avocado Spread", price: 4.0, quantity: 0 },
+          { id: 1, name: "🍓 Fresh Fruit Platter", price: 5.5, quantity: 0 },
           {
             id: 2,
-            name: "🍳 Scrambled Eggs & Cheese",
-            price: 5.0,
+            name: "🥣 Assorted Cereals & Milk",
+            price: 3.0,
             quantity: 0,
           },
+          { id: 3, name: "☕️ Coffee Service", price: 3.5, quantity: 0 },
+        ],
+        addons: [
+          { id: 0, name: "🥚 Hard-Boiled Eggs", price: 2.0, quantity: 0 },
+          {
+            id: 1,
+            name: "🥣 Oatmeal with Brown Sugar & Raisins",
+            price: 4.0,
+            quantity: 0,
+          },
+          { id: 2, name: "🍯 Greek Yogurt & Granola", price: 3.5, quantity: 0 },
         ],
       },
       {
@@ -283,85 +257,38 @@ export const menuData = [
   },
   {
     id: 3,
-    name: "Alternative Dinner Meals",
+    name: "Day - 3",
     meals: [
       {
         day_id: 3,
         id: 0,
-        type: "Dinner Option 1",
-        restaurant: "🍖 Rude Food Co.",
+        type: "breakfast",
+        restaurant: "🥯 Graul's Market",
         items: [
           {
             id: 0,
-            name: "🍖 Pulled Pork, Smoked Chicken, Chipped Brisket",
-            price: 25,
+            name: "🥯 Fresh Bagel with Cream Cheese",
+            price: 2.5,
             quantity: 0,
           },
-          {
-            id: 1,
-            name: "🍖 Baked Beans & Collard Greens",
-            price: 0.0,
-            quantity: 0,
-          },
-          { id: 2, name: "🧀 Mac and Cheese", price: 0.0, quantity: 0 },
-          {
-            id: 3,
-            name: "🍞 Corn Bread & Dinner Rolls",
-            price: 0.0,
-            quantity: 0,
-          },
-        ],
-        addons: [
-          {
-            id: 0,
-            name: "🥩 Upgrade to Sliced Brisket & Ribs",
-            price: 1.5,
-            quantity: 0,
-          },
-          {
-            id: 1,
-            name: "🍗 Smoked Chicken Wings (per wing)",
-            price: 1.5,
-            quantity: 0,
-          },
-          { id: 2, name: "🥗 House Salad", price: 3.0, quantity: 0 },
-        ],
-      },
-      {
-        day_id: 3,
-        id: 1,
-        type: "Dinner Option 2",
-        restaurant: "🌮 The Omelette Chef (Fajita Station)",
-        items: [
-          {
-            id: 0,
-            name: "🌯 Grilled Chicken Steak & Veggie Fajitas",
-            price: 25,
-            quantity: 0,
-          },
-          {
-            id: 1,
-            name: "🌶️ Sauteed Bell Peppers, Onions & Tomatoes",
-            price: 0.0,
-            quantity: 0,
-          },
+          { id: 1, name: "🍓 Fresh Fruit Platter", price: 5.5, quantity: 0 },
           {
             id: 2,
-            name: "🫘 Seasoned Black Beans & Spanish Rice",
-            price: 0.0,
+            name: "🥣 Assorted Cereals & Milk",
+            price: 3.0,
             quantity: 0,
           },
-          {
-            id: 3,
-            name: "🍅 Shredded Lettuce, Diced Tomatoes, Cheddar Cheese, Sour Cream, Guacamole, Onions, Salsa",
-            price: 0.0,
-            quantity: 0,
-          },
+          { id: 3, name: "☕️ Coffee Service", price: 3.5, quantity: 0 },
         ],
         addons: [
-          { id: 0, name: "🥗 Caesar Salad", price: 3.0, quantity: 0 },
-          { id: 1, name: "🥗 Spinach Salad", price: 3.0, quantity: 0 },
-          { id: 2, name: "🥗 Antipasto Salad", price: 3.0, quantity: 0 },
+          { id: 0, name: "🥚 Hard-Boiled Eggs", price: 2.0, quantity: 0 },
+          {
+            id: 1,
+            name: "🥣 Oatmeal with Brown Sugar & Raisins",
+            price: 4.0,
+            quantity: 0,
+          },
+          { id: 2, name: "🍯 Greek Yogurt & Granola", price: 3.5, quantity: 0 },
         ],
       },
     ],

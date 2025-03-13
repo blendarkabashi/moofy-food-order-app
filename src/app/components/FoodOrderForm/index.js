@@ -46,6 +46,31 @@ export default function FoodOrderForm({
     });
   };
 
+  const handleMealChange = (dayId, mealId, isChecked) => {
+    if (!isChecked) {
+      // Remove all items from this meal from the cart
+      setCart((prevCart) =>
+        prevCart.filter(
+          (item) => !(item.dayId === dayId && item.mealId === mealId)
+        )
+      );
+    }
+    setMealSelected((prevState) => {
+      const mealIdentifier = { dayId, mealId };
+      return prevState.some(
+        (selected) =>
+          selected.dayId === mealIdentifier.dayId &&
+          selected.mealId === mealIdentifier.mealId
+      )
+        ? prevState.filter(
+            (selected) =>
+              selected.dayId !== mealIdentifier.dayId ||
+              selected.mealId !== mealIdentifier.mealId
+          )
+        : [...prevState, mealIdentifier];
+    });
+  };
+
   useEffect(() => {
     if (!numberOfPeople || numberOfPeople < 1) return;
 
@@ -129,25 +154,9 @@ export default function FoodOrderForm({
                 <input
                   type="checkbox"
                   checked={isMealSelected(meal)}
-                  onChange={() => {
-                    setMealSelected((prevState) => {
-                      const mealIdentifier = {
-                        dayId: meal.day_id,
-                        mealId: meal.id,
-                      };
-                      return prevState.some(
-                        (selected) =>
-                          selected.dayId === mealIdentifier.dayId &&
-                          selected.mealId === mealIdentifier.mealId
-                      )
-                        ? prevState.filter(
-                            (selected) =>
-                              selected.dayId !== mealIdentifier.dayId ||
-                              selected.mealId !== mealIdentifier.mealId
-                          )
-                        : [...prevState, mealIdentifier];
-                    });
-                  }}
+                  onChange={(e) =>
+                    handleMealChange(meal.day_id, meal.id, e.target.checked)
+                  }
                   className="mr-2 w-5 h-5"
                 />
                 <h3 className="text-lg font-semibold">

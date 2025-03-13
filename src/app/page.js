@@ -21,6 +21,7 @@ export default function Home() {
   const [captcha, setCaptcha] = useState();
 
   const [numberOfPeople, setNumberOfPeople] = useState(0);
+  const [checkinDate, setCheckinDate] = useState("");
 
   const calculateSubtotal = (order) => {
     return order.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -44,6 +45,11 @@ export default function Home() {
           <p><strong>Client Full Name:</strong> ${user.fullName}</p>
           <p><strong>Client Email:</strong> ${user.email}</p>
           <p><strong>Client Phone number:</strong> ${user.phone}</p>
+          ${
+            checkinDate
+              ? `<p><strong>Check-in Date:</strong> ${checkinDate}</p>`
+              : ""
+          }
         </div>
   
         ${menuData
@@ -144,24 +150,23 @@ export default function Home() {
       {view == 1 ? (
         <>
           <div className="bg-white p-6 border border-gray-200 rounded-lg text-sm text-black mb-6">
-            <h1 className="text-3xl font-bold mb-4 text-black">
-              Order Your Food
-            </h1>
+            <img className="w-[100px] mx-auto mb-4" src="/logo.avif"></img>
+            <h1 className="text-lg font-bold mb-2 text-black">E-Catering</h1>
             In order to provide the most affordable meal options for our guests,
-            we have partnered with local restaurants to provide catered food
-            service. Our staff will pickup/ deliver to your door and setup
-            buffet style with paper plates. You pay these prices below + 18%
-            Gratuity for setup and delivery You’re responsible for throwing
-            plates in the garbage and putting any leftovers in the fridge and
-            general cleanup. Additional cleanup can be billed as as a separate
-            charge.
+            we have partnered with local restaurants to provide delivery food
+            service. Our staff will pickup or coordinate deliver to your door
+            and set up with paper plates. You pay these prices below + 20%
+            Gratuity for setup and delivery. You’re responsible for throwing
+            plates in the garbage, putting any leftovers in the fridge, and
+            general clean up. Additional cleanup can be billed as a separate
+            charge add added to each meal as an add-on.
             <br />
             <br />
             *All pricing is based per/person.
             <div className="mt-6">
               <div>
                 <label className="block mb-1 text-gray-700 text-sm font-medium">
-                  Enter the number of people you are ordering for
+                  1. Enter the number of people you are ordering for
                 </label>
                 <input
                   type="number"
@@ -175,8 +180,21 @@ export default function Home() {
                   onInput={(e) => {
                     e.target.value = e.target.value.replace(/^0+/, "");
                   }}
-                  className="p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="min-w-[220px] p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   placeholder="Enter the number of people"
+                />
+              </div>
+              <div className="mt-3">
+                <label className="block mb-1 text-gray-700 text-sm font-medium">
+                  2. Enter your check-in date
+                </label>
+                <input
+                  type="date"
+                  min={new Date().toISOString().split("T")[0]}
+                  value={checkinDate}
+                  onChange={(e) => setCheckinDate(e.target.value)}
+                  className="min-w-[220px] p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  placeholder="Enter check-in date"
                 />
               </div>
             </div>
@@ -211,6 +229,7 @@ export default function Home() {
             <div>Full Name: {user.fullName}</div>
             <div>Email: {user.email}</div>
             <div>Phone number: {user.phone}</div>
+            {checkinDate && <div>Check-in date: {checkinDate}</div>}
           </div>
 
           <div className="space-y-6">
