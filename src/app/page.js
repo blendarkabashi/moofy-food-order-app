@@ -198,7 +198,7 @@ export default function Home() {
                   onInput={(e) => {
                     e.target.value = e.target.value.replace(/^0+/, "");
                   }}
-                  className="min-w-[220px] p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="min-w-full md:min-w-[220px] p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   placeholder="Enter the number of people"
                 />
               </div>
@@ -212,7 +212,7 @@ export default function Home() {
                   min={new Date().toISOString().split("T")[0]}
                   value={checkinDate}
                   onChange={(e) => setCheckinDate(e.target.value)}
-                  className="min-w-[220px] p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="min-w-full md:min-w-[220px] p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
                   placeholder="Enter check-in date"
                 />
               </div>

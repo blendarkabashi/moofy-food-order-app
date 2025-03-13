@@ -112,25 +112,27 @@ export default function OrderSummary({
 
       <div className="space-y-2 text-gray-700">
         <div className="flex justify-between">
-          <span>Subtotal:</span>
+          <span className="pr-4">Subtotal:</span>
           <span className="font-medium">{formatCurrency(subtotal)}</span>
         </div>
         <div className="flex justify-between">
-          <span>Clean up Service ($3.00 / Person / Meal):</span>
+          <span className="pr-4">
+            Clean up Service ($3.00 / Person / Meal):
+          </span>
           <span className="font-medium">{formatCurrency(cleanUpService)}</span>
         </div>
         <div className="flex justify-between">
-          <span>
+          <span className="pr-4">
             Clean up, dishware 2 Hours helper ($6.00 / Person / Meal):
           </span>
           <span className="font-medium">{formatCurrency(cleanUpDishware)}</span>
         </div>
         <div className="flex justify-between">
-          <span>Gratuity (20%):</span>
+          <span className="pr-4">Gratuity (20%):</span>
           <span className="font-medium">{formatCurrency(gratuity)}</span>
         </div>
         <div className="flex justify-between">
-          <span>Tax (6%):</span>
+          <span className="pr-4">Tax (6%):</span>
           <span className="font-medium">{formatCurrency(tax)}</span>
         </div>
       </div>
@@ -138,12 +140,12 @@ export default function OrderSummary({
       <hr className="my-4 border-gray-300" />
 
       <div className="flex justify-between text-xl font-bold text-gray-900">
-        <span>Grand Total:</span>
+        <span className="pr-4">Grand Total:</span>
         <span>{formatCurrency(grandTotal)}</span>
       </div>
 
       <div className="mt-6 gap-6 grid grid-cols-2">
-        <div>
+        <div className="col-span-2 md:col-span-1">
           <label className="block mb-1 text-gray-700 text-sm font-medium">
             Full Name<span className="text-red-500">*</span>
           </label>
@@ -155,7 +157,7 @@ export default function OrderSummary({
             placeholder="Enter your full name"
           />
         </div>
-        <div>
+        <div className="col-span-2 md:col-span-1">
           <label className="block mb-1 text-gray-700 text-sm font-medium">
             Email<span className="text-red-500">*</span>
           </label>

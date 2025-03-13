@@ -170,7 +170,7 @@ export default function FoodOrderForm({
                       key={item.id}
                       className="flex justify-between items-center"
                     >
-                      <div>
+                      <div className="pr-5">
                         <span className="text-gray-800 font-medium">
                           {item.name}
                         </span>
