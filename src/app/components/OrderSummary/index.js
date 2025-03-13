@@ -1,6 +1,12 @@
 import { useState, useEffect } from "react";
 
-export default function OrderSummary({ order, goToOverview, onRemoveItem }) {
+export default function OrderSummary({
+  order,
+  goToOverview,
+  onRemoveItem,
+  numberOfPeople,
+  checkinDate,
+}) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -10,9 +16,24 @@ export default function OrderSummary({ order, goToOverview, onRemoveItem }) {
 
   useEffect(() => {
     const isFormValid =
-      fullName && email && phone && !emailError && !phoneError;
+      fullName &&
+      checkinDate &&
+      numberOfPeople > 0 &&
+      email &&
+      phone &&
+      !emailError &&
+      !phoneError;
     setIsButtonDisabled(!isFormValid || order.length === 0);
-  }, [fullName, email, phone, emailError, phoneError, order]);
+  }, [
+    fullName,
+    numberOfPeople,
+    checkinDate,
+    email,
+    phone,
+    emailError,
+    phoneError,
+    order,
+  ]);
 
   const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -37,6 +58,11 @@ export default function OrderSummary({ order, goToOverview, onRemoveItem }) {
     return order.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
+  const calculateUniqueMeals = (order) => {
+    const uniqueMeals = new Set(order.map((item) => item.mealId));
+    return uniqueMeals.size;
+  };
+
   const formatCurrency = (value) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
@@ -47,7 +73,11 @@ export default function OrderSummary({ order, goToOverview, onRemoveItem }) {
   const subtotal = order ? calculateSubtotal(order) : 0;
   const gratuity = subtotal * 0.2;
   const tax = subtotal * 0.06;
-  const grandTotal = subtotal + gratuity + tax;
+  const uniqueMeals = calculateUniqueMeals(order);
+  const cleanUpService = numberOfPeople * uniqueMeals * 3.0;
+  const cleanUpDishware = numberOfPeople * uniqueMeals * 6.0;
+  const grandTotal =
+    subtotal + gratuity + tax + cleanUpService + cleanUpDishware;
 
   return (
     <div className="p-6 border border-gray-200 bg-white text-gray-800 w-full rounded-lg shadow-lg">
@@ -86,6 +116,16 @@ export default function OrderSummary({ order, goToOverview, onRemoveItem }) {
           <span className="font-medium">{formatCurrency(subtotal)}</span>
         </div>
         <div className="flex justify-between">
+          <span>Clean up Service ($3.00 / Person / Meal):</span>
+          <span className="font-medium">{formatCurrency(cleanUpService)}</span>
+        </div>
+        <div className="flex justify-between">
+          <span>
+            Clean up, dishware 2 Hours helper ($6.00 / Person / Meal):
+          </span>
+          <span className="font-medium">{formatCurrency(cleanUpDishware)}</span>
+        </div>
+        <div className="flex justify-between">
           <span>Gratuity (20%):</span>
           <span className="font-medium">{formatCurrency(gratuity)}</span>
         </div>
@@ -105,7 +145,7 @@ export default function OrderSummary({ order, goToOverview, onRemoveItem }) {
       <div className="mt-6 gap-6 grid grid-cols-2">
         <div>
           <label className="block mb-1 text-gray-700 text-sm font-medium">
-            Full Name
+            Full Name<span className="text-red-500">*</span>
           </label>
           <input
             type="text"
@@ -117,7 +157,7 @@ export default function OrderSummary({ order, goToOverview, onRemoveItem }) {
         </div>
         <div>
           <label className="block mb-1 text-gray-700 text-sm font-medium">
-            Email
+            Email<span className="text-red-500">*</span>
           </label>
           <input
             type="email"
@@ -135,7 +175,7 @@ export default function OrderSummary({ order, goToOverview, onRemoveItem }) {
         </div>
         <div className="col-span-2">
           <label className="block mb-1 text-gray-700 text-sm font-medium">
-            Phone Number
+            Phone Number<span className="text-red-500">*</span>
           </label>
           <input
             type="tel"

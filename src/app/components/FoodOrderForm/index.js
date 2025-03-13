@@ -148,7 +148,7 @@ export default function FoodOrderForm({
           </h2>
 
           {day.meals.map((meal) => (
-            <div key={meal.id} className="mb-6">
+            <div key={meal.id} className="mb-6 last:mb-0">
               <label className="flex items-center mb-2 cursor-pointer">
                 <input
                   type="checkbox"
@@ -255,7 +255,7 @@ export default function FoodOrderForm({
                   ))}
 
                   {meal.addons?.length > 0 && (
-                    <div className="mt-3 ml-6 p-3 bg-gray-50 border-l-4 border-blue-400 rounded-lg">
+                    <div className="mt-3 p-3 bg-gray-50 border-l-4 border-blue-400 rounded-lg">
                       <h4 className="text-sm font-semibold text-blue-400">
                         Add-ons
                       </h4>
@@ -264,7 +264,7 @@ export default function FoodOrderForm({
                           key={addon.id}
                           className="flex justify-between items-center text-gray-600 mt-1"
                         >
-                          <span>➕ {addon.name}</span>
+                          <span>{addon.name}</span>
                           <div className="flex items-center">
                             <span className="font-medium mr-6">
                               ${addon.price.toFixed(2)}

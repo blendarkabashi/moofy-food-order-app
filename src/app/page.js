@@ -27,10 +27,19 @@ export default function Home() {
     return order.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
+  const calculateUniqueMeals = (order) => {
+    const uniqueMeals = new Set(order.map((item) => item.mealId));
+    return uniqueMeals.size;
+  };
+
   const subtotal = cart ? calculateSubtotal(cart) : 0;
   const gratuity = subtotal * 0.2;
   const tax = subtotal * 0.06;
-  const grandTotal = subtotal + gratuity + tax;
+  const uniqueMeals = calculateUniqueMeals(cart);
+  const cleanUpService = numberOfPeople * uniqueMeals * 3.0;
+  const cleanUpDishware = numberOfPeople * uniqueMeals * 6.0;
+  const grandTotal =
+    subtotal + gratuity + tax + cleanUpService + cleanUpDishware;
 
   const goToOverview = async (fullName, email, phone) => {
     setView(2);
@@ -99,6 +108,12 @@ export default function Home() {
         <hr style="border-top: 1px solid #ddd; margin: 20px 0;">
         <div style="font-size: 16px;">
           <p><strong>Subtotal:</strong> ${formatCurrency(subtotal)}</p>
+                    <p><strong>Clean up Service ($3.00 / Person / Meal):</strong> ${formatCurrency(
+                      cleanUpService
+                    )}</p>
+          <p><strong>Clean up, dishware, 2 Hours helper ($6.00 / Person / Meal):</strong> ${formatCurrency(
+            cleanUpDishware
+          )}</p>
           <p><strong>Gratuity (20%):</strong> ${formatCurrency(gratuity)}</p>
           <p><strong>Tax (6%):</strong> ${formatCurrency(tax)}</p>
         </div>
@@ -119,6 +134,8 @@ export default function Home() {
           subtotal,
           gratuity,
           tax,
+          cleanUpService,
+          cleanUpDishware,
           grandTotal,
           htmlContent: emailContent,
         });
@@ -166,7 +183,8 @@ export default function Home() {
             <div className="mt-6">
               <div>
                 <label className="block mb-1 text-gray-700 text-sm font-medium">
-                  1. Enter the number of people you are ordering for
+                  1. Enter the number of people you are ordering for{" "}
+                  <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="number"
@@ -186,7 +204,8 @@ export default function Home() {
               </div>
               <div className="mt-3">
                 <label className="block mb-1 text-gray-700 text-sm font-medium">
-                  2. Enter your check-in date
+                  2. Enter your check-in date{" "}
+                  <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="date"
@@ -199,8 +218,8 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <div className="flex items-start justify-between">
-            <div className="w-[60%]">
+          <div className="flex flex-col md:flex-row items-start justify-between">
+            <div className="w-full md:w-[60%]">
               <FoodOrderForm
                 menuState={menuState}
                 cart={cart}
@@ -208,11 +227,13 @@ export default function Home() {
                 numberOfPeople={numberOfPeople}
               />
             </div>
-            <div className="relative w-[40%] ml-[25px]">
+            <div className="relative w-full md:w-[40%] mt-6 md:mt-0 md:ml-[25px]">
               <OrderSummary
                 order={cart}
                 goToOverview={goToOverview}
                 onRemoveItem={handleRemoveItem}
+                checkinDate={checkinDate}
+                numberOfPeople={numberOfPeople}
               />
             </div>
           </div>
@@ -285,6 +306,20 @@ export default function Home() {
             <div className="flex justify-between">
               <span>Subtotal:</span>
               <span className="font-medium">{formatCurrency(subtotal)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span>Clean up Service ($3.00 / Person / Meal):</span>
+              <span className="font-medium">
+                {formatCurrency(cleanUpService)}
+              </span>
+            </div>
+            <div className="flex justify-between">
+              <span>
+                Clean up, dishware, 2 Hours helper ($6.00 / Person / Meal):
+              </span>
+              <span className="font-medium">
+                {formatCurrency(cleanUpDishware)}
+              </span>
             </div>
             <div className="flex justify-between">
               <span>Gratuity (20%):</span>
