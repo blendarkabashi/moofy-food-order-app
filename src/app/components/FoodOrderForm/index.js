@@ -48,7 +48,6 @@ export default function FoodOrderForm({
 
   const handleMealChange = (dayId, mealId, isChecked) => {
     if (!isChecked) {
-      // Remove all items from this meal from the cart
       setCart((prevCart) =>
         prevCart.filter(
           (item) => !(item.dayId === dayId && item.mealId === mealId)
