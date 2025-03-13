@@ -125,13 +125,15 @@ export default function Home() {
   };
 
   const handleRemoveItem = (item) => {
+    console.log(item);
     setCart((prevCart) =>
       prevCart.filter(
         (cartItem) =>
           !(
             cartItem.dayId === item.dayId &&
             cartItem.mealId === item.mealId &&
-            cartItem.itemId === item.itemId
+            cartItem.itemId === item.itemId &&
+            cartItem.name === item.name
           )
       )
     );
