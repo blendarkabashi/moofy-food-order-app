@@ -6,6 +6,16 @@ export default function OrderSummary({
   onRemoveItem,
   numberOfPeople,
   checkinDate,
+  includeCleanupService,
+  setIncludeCleanupService,
+  includeCleanupDishware,
+  setIncludeCleanupDishware,
+  subtotal,
+  gratuity,
+  tax,
+  cleanUpService,
+  cleanUpDishware,
+  grandTotal,
 }) {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -54,30 +64,12 @@ export default function OrderSummary({
     );
   };
 
-  const calculateSubtotal = (order) => {
-    return order.reduce((total, item) => total + item.price * item.quantity, 0);
-  };
-
-  const calculateUniqueMeals = (order) => {
-    const uniqueMeals = new Set(order.map((item) => item.mealId));
-    return uniqueMeals.size;
-  };
-
   const formatCurrency = (value) => {
     return new Intl.NumberFormat("en-US", {
       style: "currency",
       currency: "USD",
     }).format(value);
   };
-
-  const subtotal = order ? calculateSubtotal(order) : 0;
-  const gratuity = subtotal * 0.2;
-  const tax = subtotal * 0.06;
-  const uniqueMeals = calculateUniqueMeals(order);
-  const cleanUpService = numberOfPeople * uniqueMeals * 3.0;
-  const cleanUpDishware = numberOfPeople * uniqueMeals * 6.0;
-  const grandTotal =
-    subtotal + gratuity + tax + cleanUpService + cleanUpDishware;
 
   return (
     <div className="p-6 border border-gray-200 bg-white text-gray-800 w-full rounded-lg shadow-lg">
@@ -116,24 +108,46 @@ export default function OrderSummary({
           <span className="font-medium">{formatCurrency(subtotal)}</span>
         </div>
         <div className="flex justify-between">
-          <span className="pr-4">
-            Clean up Service ($3.00 / Person / Meal):
-          </span>
-          <span className="font-medium">{formatCurrency(cleanUpService)}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="pr-4">
-            Clean up, dishware 2 Hours helper ($6.00 / Person / Meal):
-          </span>
-          <span className="font-medium">{formatCurrency(cleanUpDishware)}</span>
-        </div>
-        <div className="flex justify-between">
           <span className="pr-4">Gratuity (20%):</span>
           <span className="font-medium">{formatCurrency(gratuity)}</span>
         </div>
         <div className="flex justify-between">
           <span className="pr-4">Tax (6%):</span>
           <span className="font-medium">{formatCurrency(tax)}</span>
+        </div>
+        <div className="flex justify-between items-center group">
+          <span className="pr-4">
+            Clean up Service ($3.00 / Person / Meal):
+          </span>
+          <div className="flex items-center">
+            <span className="font-medium mr-3">
+              {formatCurrency(cleanUpService)}
+            </span>
+            <input
+              type="checkbox"
+              checked={includeCleanupService}
+              onChange={(e) => setIncludeCleanupService(!includeCleanupService)}
+              className="w-5 h-5"
+            />
+          </div>
+        </div>
+        <div className="flex justify-between items-center group">
+          <span className="pr-4">
+            Clean up, dishware 2 Hours helper ($6.00 / Person / Meal):
+          </span>
+          <div className="flex items-center">
+            <span className="font-medium mr-3">
+              {formatCurrency(cleanUpDishware)}
+            </span>
+            <input
+              type="checkbox"
+              checked={includeCleanupDishware}
+              onChange={(e) =>
+                setIncludeCleanupDishware(!includeCleanupDishware)
+              }
+              className="w-5 h-5"
+            />
+          </div>
         </div>
       </div>
 

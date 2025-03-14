@@ -22,6 +22,8 @@ export default function Home() {
 
   const [numberOfPeople, setNumberOfPeople] = useState(0);
   const [checkinDate, setCheckinDate] = useState("");
+  const [includeCleanupService, setIncludeCleanupService] = useState(false);
+  const [includeCleanupDishware, setIncludeCleanupDishware] = useState(false);
 
   const calculateSubtotal = (order) => {
     return order.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -39,7 +41,11 @@ export default function Home() {
   const cleanUpService = numberOfPeople * uniqueMeals * 3.0;
   const cleanUpDishware = numberOfPeople * uniqueMeals * 6.0;
   const grandTotal =
-    subtotal + gratuity + tax + cleanUpService + cleanUpDishware;
+    subtotal +
+    gratuity +
+    tax +
+    (includeCleanupService ? cleanUpService : 0) +
+    (includeCleanupDishware ? cleanUpDishware : 0);
 
   const goToOverview = async (fullName, email, phone) => {
     setView(2);
@@ -108,12 +114,20 @@ export default function Home() {
         <hr style="border-top: 1px solid #ddd; margin: 20px 0;">
         <div style="font-size: 16px;">
           <p><strong>Subtotal:</strong> ${formatCurrency(subtotal)}</p>
-                    <p><strong>Clean up Service ($3.00 / Person / Meal):</strong> ${formatCurrency(
-                      cleanUpService
-                    )}</p>
-          <p><strong>Clean up, dishware, 2 Hours helper ($6.00 / Person / Meal):</strong> ${formatCurrency(
-            cleanUpDishware
-          )}</p>
+                    ${
+                      includeCleanupService
+                        ? `<p><strong>Clean up Service ($3.00 / Person / Meal):</strong> ${formatCurrency(
+                            cleanUpService
+                          )}</p>`
+                        : ""
+                    }
+          ${
+            includeCleanupDishware
+              ? `<p><strong>Clean up, dishware, 2 Hours helper ($6.00 / Person / Meal):</strong> ${formatCurrency(
+                  cleanUpDishware
+                )}</p>`
+              : ""
+          }
           <p><strong>Gratuity (20%):</strong> ${formatCurrency(gratuity)}</p>
           <p><strong>Tax (6%):</strong> ${formatCurrency(tax)}</p>
         </div>
@@ -234,6 +248,16 @@ export default function Home() {
                 onRemoveItem={handleRemoveItem}
                 checkinDate={checkinDate}
                 numberOfPeople={numberOfPeople}
+                includeCleanupService={includeCleanupService}
+                setIncludeCleanupService={setIncludeCleanupService}
+                includeCleanupDishware={includeCleanupDishware}
+                setIncludeCleanupDishware={setIncludeCleanupDishware}
+                subtotal={subtotal}
+                gratuity={gratuity}
+                tax={tax}
+                cleanUpService={cleanUpService}
+                cleanUpDishware={cleanUpDishware}
+                grandTotal={grandTotal}
               />
             </div>
           </div>
@@ -307,20 +331,24 @@ export default function Home() {
               <span>Subtotal:</span>
               <span className="font-medium">{formatCurrency(subtotal)}</span>
             </div>
-            <div className="flex justify-between">
-              <span>Clean up Service ($3.00 / Person / Meal):</span>
-              <span className="font-medium">
-                {formatCurrency(cleanUpService)}
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span>
-                Clean up, dishware, 2 Hours helper ($6.00 / Person / Meal):
-              </span>
-              <span className="font-medium">
-                {formatCurrency(cleanUpDishware)}
-              </span>
-            </div>
+            {includeCleanupService && (
+              <div className="flex justify-between">
+                <span>Clean up Service ($3.00 / Person / Meal):</span>
+                <span className="font-medium">
+                  {formatCurrency(cleanUpService)}
+                </span>
+              </div>
+            )}
+            {includeCleanupDishware && (
+              <div className="flex justify-between">
+                <span>
+                  Clean up, dishware, 2 Hours helper ($6.00 / Person / Meal):
+                </span>
+                <span className="font-medium">
+                  {formatCurrency(cleanUpDishware)}
+                </span>
+              </div>
+            )}
             <div className="flex justify-between">
               <span>Gratuity (20%):</span>
               <span className="font-medium">{formatCurrency(gratuity)}</span>
