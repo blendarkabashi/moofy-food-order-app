@@ -5,7 +5,7 @@ export const menuData = [
     meals: [
       {
         day_id: 0,
-        id: 2,
+        id: 0,
         type: "Dinner",
         restaurant: "🌮 The Omelette Chef (Fajita Station)",
         items: [
@@ -76,6 +76,20 @@ export const menuData = [
             quantity: 0,
           },
           { id: 2, name: "🍯 Greek Yogurt & Granola", price: 3.5, quantity: 0 },
+          { id: 3, name: "🍩 Donuts", price: 1.5, quantity: 0 },
+          {
+            id: 4,
+            name: "🥪 Egg & Cheese English Muffin",
+            price: 7,
+            quantity: 0,
+          },
+          { id: 5, name: "🥗 Veggie Quiche", price: 4, quantity: 0 },
+          {
+            id: 6,
+            name: "🍊 Fresh Squeeze Orange Juice",
+            price: 3,
+            quantity: 0,
+          },
         ],
       },
       {
@@ -191,6 +205,20 @@ export const menuData = [
             quantity: 0,
           },
           { id: 2, name: "🍯 Greek Yogurt & Granola", price: 3.5, quantity: 0 },
+          { id: 3, name: "🍩 Donuts", price: 1.5, quantity: 0 },
+          {
+            id: 4,
+            name: "🥪 Egg & Cheese English Muffin",
+            price: 7,
+            quantity: 0,
+          },
+          { id: 5, name: "🥗 Veggie Quiche", price: 4, quantity: 0 },
+          {
+            id: 6,
+            name: "🍊 Fresh Squeeze Orange Juice",
+            price: 3,
+            quantity: 0,
+          },
         ],
       },
       {
@@ -289,6 +317,159 @@ export const menuData = [
             quantity: 0,
           },
           { id: 2, name: "🍯 Greek Yogurt & Granola", price: 3.5, quantity: 0 },
+          { id: 3, name: "🍩 Donuts", price: 1.5, quantity: 0 },
+          {
+            id: 4,
+            name: "🥪 Egg & Cheese English Muffin",
+            price: 7,
+            quantity: 0,
+          },
+          { id: 5, name: "🥗 Veggie Quiche", price: 4, quantity: 0 },
+          {
+            id: 6,
+            name: "🍊 Fresh Squeeze Orange Juice",
+            price: 3,
+            quantity: 0,
+          },
+        ],
+      },
+      {
+        day_id: 3,
+        id: 1,
+        type: "lunch",
+        restaurant: "🌮 Graul’s Market",
+        items: [
+          {
+            id: 0,
+            name: "🥪 Party Finger Sandwiches (Egg salad, Chicken Salad, Tuna Salad)",
+            price: 6,
+            quantity: 0,
+          },
+          { id: 1, name: "🥕 Gourmet Vegetable Tray", price: 6.0, quantity: 0 },
+        ],
+        addons: [
+          {
+            id: 0,
+            name: "🍤 Peeled and Deveined Shrip Platter",
+            price: 8,
+            quantity: 0,
+          },
+          { id: 1, name: "🧀 Cheese & Fruit Platter", price: 4.5, quantity: 0 },
+          { id: 2, name: "🥙 Gourmet Cookie Tray", price: 4.5, quantity: 0 },
+        ],
+      },
+      {
+        day_id: 3,
+        id: 2,
+        type: "dinner",
+        restaurant: "🌮 Graul’s Market",
+        items: [
+          {
+            id: 0,
+            name: "🍗 Fried Chicken",
+            price: 10.0,
+            quantity: 0,
+          },
+          { id: 1, name: "🥬 Cole Slaw", price: 2.0, quantity: 0 },
+          { id: 2, name: "🥔 Potato Salad", price: 2.0, quantity: 0 },
+          {
+            id: 3,
+            name: "🥗 Oven Roasted Vegetables",
+            price: 5.0,
+            quantity: 0,
+          },
+        ],
+        addons: [
+          { id: 0, name: "🥦 Broccoli Slaw", price: 6, quantity: 0 },
+          { id: 1, name: "🥗 Garden Salad", price: 6, quantity: 0 },
+          { id: 2, name: "🥗 Caesar Salad", price: 6, quantity: 0 },
+          {
+            id: 3,
+            name: "🍗 Marinated Chicken Breast (lemon/herb)",
+            price: 12,
+            quantity: 0,
+          },
+          {
+            id: 4,
+            name: "🍤 Roasted Shrimp & Lemony Orzo",
+            price: 10,
+            quantity: 0,
+          },
+          { id: 5, name: "🍝 Macaroni & Cheese", price: 4, quantity: 0 },
+        ],
+      },
+    ],
+  },
+  {
+    id: 4,
+    name: "Day - 4",
+    meals: [
+      {
+        day_id: 4,
+        id: 0,
+        type: "breakfast",
+        restaurant: "🥯 Graul's Market",
+        items: [
+          {
+            id: 0,
+            name: "🥯 Fresh Bagel with Cream Cheese",
+            price: 2.5,
+            quantity: 0,
+          },
+          { id: 1, name: "🍓 Fresh Fruit Platter", price: 5.5, quantity: 0 },
+          {
+            id: 2,
+            name: "🥣 Assorted Cereals & Milk",
+            price: 3.0,
+            quantity: 0,
+          },
+          { id: 3, name: "☕️ Coffee Service", price: 3.5, quantity: 0 },
+        ],
+        addons: [
+          { id: 0, name: "🥚 Hard-Boiled Eggs", price: 2.0, quantity: 0 },
+          {
+            id: 1,
+            name: "🥣 Oatmeal with Brown Sugar & Raisins",
+            price: 4.0,
+            quantity: 0,
+          },
+          { id: 2, name: "🍯 Greek Yogurt & Granola", price: 3.5, quantity: 0 },
+          { id: 3, name: "🍩 Donuts", price: 1.5, quantity: 0 },
+          {
+            id: 4,
+            name: "🥪 Egg & Cheese English Muffin",
+            price: 7,
+            quantity: 0,
+          },
+          { id: 5, name: "🥗 Veggie Quiche", price: 4, quantity: 0 },
+          {
+            id: 6,
+            name: "🍊 Fresh Squeeze Orange Juice",
+            price: 3,
+            quantity: 0,
+          },
+        ],
+      },
+      {
+        day_id: 4,
+        id: 1,
+        type: "lunch",
+        restaurant: "🥪 Bagery",
+        items: [
+          {
+            id: 0,
+            name: `🥪 Choice of turkey & muenster, ham & cheddar, corned beef & swiss or veggie sandwich served on our homemade, organic, multigrain bread. Dressed with spring mix, tomato and red onion and served with bag of chips. Mustard and mayonnaise packets provided.`,
+            price: 15,
+            quantity: 0,
+          },
+        ],
+        addons: [
+          {
+            id: 0,
+            name: "🥤 Soft Drinks/ Bottled Water",
+            price: 3,
+            quantity: 0,
+          },
         ],
       },
     ],

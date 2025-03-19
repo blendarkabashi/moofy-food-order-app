@@ -59,7 +59,7 @@ export default function Home() {
         <div style="margin-bottom: 20px;">
           <p><strong>Client Full Name:</strong> ${user.fullName}</p>
           <p><strong>Client Email:</strong> ${user.email}</p>
-          <p><strong>Client Phone number:</strong> ${user.phone}</p>
+          <p><strong>Client Phone Number:</strong> ${user.phone}</p>
           ${
             checkinDate
               ? `<p><strong>Check-in Date:</strong> ${checkinDate}</p>`
