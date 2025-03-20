@@ -440,7 +440,7 @@ export const menuData = [
   },
   {
     id: 4,
-    name: "Day - 4 (BOXED LUNCH)",
+    name: "Day - 4",
     meals: [
       {
         day_id: 4,
@@ -491,7 +491,7 @@ export const menuData = [
       {
         day_id: 4,
         id: 1,
-        type: "lunch",
+        type: "boxed lunch",
         restaurant: "🥪 Bagery",
         items: [
           {
