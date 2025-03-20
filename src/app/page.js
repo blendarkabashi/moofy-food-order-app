@@ -19,9 +19,7 @@ export default function Home() {
   const [view, setView] = useState(1);
   const [user, setUser] = useState();
   const [captcha, setCaptcha] = useState();
-
   const [numberOfPeople, setNumberOfPeople] = useState(0);
-  const [additionalNote, setAdditionalNote] = useState("");
   const [checkinDate, setCheckinDate] = useState("");
   const [includeCleanupService, setIncludeCleanupService] = useState(false);
   const [includeCleanupDishware, setIncludeCleanupDishware] = useState(false);
@@ -48,9 +46,9 @@ export default function Home() {
     (includeCleanupService ? cleanUpService : 0) +
     (includeCleanupDishware ? cleanUpDishware : 0);
 
-  const goToOverview = async (fullName, email, phone) => {
+  const goToOverview = async (fullName, email, phone, additionalNote) => {
     setView(2);
-    setUser({ fullName, email, phone });
+    setUser({ fullName, email, phone, additionalNote });
   };
   const generateOrderEmail = () => {
     return `
@@ -67,8 +65,8 @@ export default function Home() {
               : ""
           }
           ${
-            additionalNote
-              ? `<p><strong>Additional Notes:</strong> ${additionalNote}</p>`
+            user.additionalNote
+              ? `<p><strong>Additional Notes:</strong> ${user.additionalNote}</p>`
               : ""
           }
         </div>
@@ -236,17 +234,6 @@ export default function Home() {
                   placeholder="Enter check-in date"
                 />
               </div>
-              <div className="mt-3">
-                <label className="block mb-1 text-gray-700 text-sm font-medium">
-                  3. Add any additional note (Optional){" "}
-                </label>
-                <textarea
-                  value={additionalNote}
-                  onChange={(e) => setAdditionalNote(e.target.value)}
-                  className="min-w-full md:min-w-[380px] md:min-h-[80px] p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                  placeholder="Additional note"
-                />
-              </div>
             </div>
           </div>
           <div className="flex flex-col md:flex-row items-start justify-between">
@@ -292,7 +279,9 @@ export default function Home() {
             <div>Email: {user.email}</div>
             <div>Phone number: {user.phone}</div>
             {checkinDate && <div>Check-in date: {checkinDate}</div>}
-            {additionalNote && <div>Additional Notes: {additionalNote}</div>}
+            {user.additionalNote && (
+              <div>Additional Notes: {user.additionalNote}</div>
+            )}
           </div>
 
           <div className="space-y-6">

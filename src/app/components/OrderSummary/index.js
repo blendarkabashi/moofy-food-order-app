@@ -20,6 +20,7 @@ export default function OrderSummary({
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [additionalNote, setAdditionalNote] = useState("");
   const [emailError, setEmailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
@@ -204,13 +205,24 @@ export default function OrderSummary({
             <p className="text-red-500 text-sm mt-1">{phoneError}</p>
           )}
         </div>
+        <div className="col-span-2">
+          <label className="block mb-1 text-gray-700 text-sm font-medium">
+            Add any additional note (Optional){" "}
+          </label>
+          <textarea
+            value={additionalNote}
+            onChange={(e) => setAdditionalNote(e.target.value)}
+            className="min-w-full md:min-h-[80px] p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            placeholder="Additional note"
+          />
+        </div>
       </div>
 
       <button
         className={`${
           isButtonDisabled && "opacity-60 pointer-events-none"
         } cursor-pointer w-full bg-blue-600 py-2 mt-6 rounded-lg text-white font-semibold hover:bg-blue-700 transition`}
-        onClick={() => goToOverview(fullName, email, phone)}
+        onClick={() => goToOverview(fullName, email, phone, additionalNote)}
         disabled={isButtonDisabled}
       >
         Checkout & Review

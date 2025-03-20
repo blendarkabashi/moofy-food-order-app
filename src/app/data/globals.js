@@ -279,6 +279,44 @@ export const menuData = [
             price: 8.0,
             quantity: 0,
           },
+          {
+            id: 4,
+            name: "🍝 Rigatoni Amatriciana",
+            price: 9.0,
+            quantity: 0,
+          },
+          {
+            id: 5,
+            name: "🍗 Chicken Parmesan",
+            price: 10.0,
+            quantity: 0,
+          },
+          {
+            id: 6,
+            name: "🥗 Chopped Salad w/ House Dressing",
+            price: 5.0,
+            quantity: 0,
+          },
+          {
+            id: 7,
+            name: "🥣 Bruschetta Platter",
+            price: 5.0,
+            quantity: 0,
+          },
+          {
+            id: 8,
+            name: "🥦 Roasted Italian Vegetables & Olives",
+            price: 5.0,
+            quantity: 0,
+          },
+          { id: 9, name: "🍆 Side of Spinach", price: 5.0, quantity: 0 },
+          {
+            id: 10,
+            name: "🥦 Crispy Brussels Sprouts",
+            price: 5.0,
+            quantity: 0,
+          },
+          { id: 11, name: "🍰 Mini Canolis", price: 4.0, quantity: 0 },
         ],
       },
     ],
@@ -402,7 +440,7 @@ export const menuData = [
   },
   {
     id: 4,
-    name: "Day - 4",
+    name: "Day - 4 (BOXED LUNCH)",
     meals: [
       {
         day_id: 4,
