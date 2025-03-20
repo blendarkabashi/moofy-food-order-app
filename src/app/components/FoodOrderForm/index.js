@@ -149,19 +149,19 @@ export default function FoodOrderForm({
 
           {day.meals.map((meal) => (
             <div key={meal.id} className="mb-6 last:mb-0">
-              <label className="flex items-center mb-2 cursor-pointer">
+              <div className="flex items-center">
                 <input
                   type="checkbox"
                   checked={isMealSelected(meal)}
                   onChange={(e) =>
                     handleMealChange(meal.day_id, meal.id, e.target.checked)
                   }
-                  className="mr-2 w-5 h-5"
+                  className="mr-2 w-5 h-5 cursor-pointer"
                 />
                 <h3 className="text-lg font-semibold">
                   {meal.type.toUpperCase()} - {meal.restaurant}
                 </h3>
-              </label>
+              </div>
 
               {isMealSelected(meal) && (
                 <div className="space-y-3">
