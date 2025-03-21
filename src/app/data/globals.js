@@ -12,22 +12,9 @@ export const menuData = [
           {
             id: 0,
             name: "🌯 Grilled Chicken Steak & Veggie Fajitas",
+            description:
+              "Included: 🌶️ Sauteed Bell Peppers, Onions & Tomatoes, 🫘 Seasoned Black Beans & Spanish Rice, 🍅 Shredded Lettuce, Diced Tomatoes, Cheddar Cheese, Sour Cream, Guacamole, Onions, Salsa",
             price: 25,
-          },
-          {
-            id: 1,
-            name: "🌶️ Sauteed Bell Peppers, Onions & Tomatoes",
-            price: 0.0,
-          },
-          {
-            id: 2,
-            name: "🫘 Seasoned Black Beans & Spanish Rice",
-            price: 0.0,
-          },
-          {
-            id: 3,
-            name: "🍅 Shredded Lettuce, Diced Tomatoes, Cheddar Cheese, Sour Cream, Guacamole, Onions, Salsa",
-            price: 0.0,
           },
         ],
         addons: [
