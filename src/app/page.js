@@ -3,26 +3,35 @@
 import { useState } from "react";
 import FoodOrderForm from "./components/FoodOrderForm";
 import OrderSummary from "./components/OrderSummary";
-import { menuData } from "./data/globals";
+import { formatCurrency, menuData } from "./data/globals";
 import { sendOrderEmail } from "../utils/email";
 import ReCAPTCHA from "react-google-recaptcha";
-const formatCurrency = (value) => {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(value);
-};
+import TextInput from "./components/shared/TextInput";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import {
+  removeItem,
+  setCart,
+  setCheckinDate,
+  setNumberOfPeople,
+  setView,
+} from "./store";
 
 export default function Home() {
+  const dispatch = useDispatch();
   const [menuState, setMenuState] = useState(menuData);
-  const [cart, setCart] = useState([]);
-  const [view, setView] = useState(1);
-  const [user, setUser] = useState();
+  const cart = useSelector((state) => state.order.cart);
+  const view = useSelector((state) => state.order.view);
+  const user = useSelector((state) => state.order.user);
+  const numberOfPeople = useSelector((state) => state.order.numberOfPeople);
+  const checkinDate = useSelector((state) => state.order.checkinDate);
+  const includeCleanupDishware = useSelector(
+    (state) => state.order.includeCleanupDishware
+  );
+  const includeCleanupService = useSelector(
+    (state) => state.order.includeCleanupService
+  );
   const [captcha, setCaptcha] = useState();
-  const [numberOfPeople, setNumberOfPeople] = useState(0);
-  const [checkinDate, setCheckinDate] = useState("");
-  const [includeCleanupService, setIncludeCleanupService] = useState(false);
-  const [includeCleanupDishware, setIncludeCleanupDishware] = useState(false);
 
   const calculateSubtotal = (order) => {
     return order.reduce((total, item) => total + item.price * item.quantity, 0);
@@ -46,9 +55,8 @@ export default function Home() {
     (includeCleanupService ? cleanUpService : 0) +
     (includeCleanupDishware ? cleanUpDishware : 0);
 
-  const goToOverview = async (fullName, email, phone, additionalNote) => {
-    setView(2);
-    setUser({ fullName, email, phone, additionalNote });
+  const goToOverview = () => {
+    dispatch(setView(2));
   };
   const generateOrderEmail = () => {
     return `
@@ -158,26 +166,11 @@ export default function Home() {
           htmlContent: emailContent,
         });
 
-        setView(3);
+        dispatch(setView(3));
       }
     } catch (error) {
       alert("Failed to submit order. Please try again.");
     }
-  };
-
-  const handleRemoveItem = (item) => {
-    console.log(item);
-    setCart((prevCart) =>
-      prevCart.filter(
-        (cartItem) =>
-          !(
-            cartItem.dayId === item.dayId &&
-            cartItem.mealId === item.mealId &&
-            cartItem.itemId === item.itemId &&
-            cartItem.name === item.name
-          )
-      )
-    );
   };
 
   return (
@@ -204,19 +197,19 @@ export default function Home() {
                   1. Enter the number of people you are ordering for{" "}
                   <span className="text-red-500">*</span>
                 </label>
-                <input
+                <TextInput
                   type="number"
                   min="0"
                   value={numberOfPeople}
                   onChange={(e) => {
                     const value =
                       parseInt(e.target.value.replace(/^0+/, "")) || 0;
-                    setNumberOfPeople(Math.max(0, value));
+                    dispatch(setNumberOfPeople(Math.max(0, value)));
                   }}
                   onInput={(e) => {
                     e.target.value = e.target.value.replace(/^0+/, "");
                   }}
-                  className="min-w-full md:min-w-[220px] p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  className="max-w-full md:max-w-[220px]"
                   placeholder="Enter the number of people"
                 />
               </div>
@@ -225,12 +218,12 @@ export default function Home() {
                   2. Enter your check-in date{" "}
                   <span className="text-red-500">*</span>
                 </label>
-                <input
+                <TextInput
                   type="date"
                   min={new Date().toISOString().split("T")[0]}
                   value={checkinDate}
-                  onChange={(e) => setCheckinDate(e.target.value)}
-                  className="min-w-full md:min-w-[220px] p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                  onChange={(e) => dispatch(setCheckinDate(e.target.value))}
+                  className="max-w-full md:max-w-[220px]"
                   placeholder="Enter check-in date"
                 />
               </div>
@@ -238,24 +231,11 @@ export default function Home() {
           </div>
           <div className="flex flex-col md:flex-row items-start justify-between">
             <div className="w-full md:w-[60%]">
-              <FoodOrderForm
-                menuState={menuState}
-                cart={cart}
-                setCart={setCart}
-                numberOfPeople={numberOfPeople}
-              />
+              <FoodOrderForm />
             </div>
             <div className="relative w-full md:w-[40%] mt-6 md:mt-0 md:ml-[25px]">
               <OrderSummary
-                order={cart}
                 goToOverview={goToOverview}
-                onRemoveItem={handleRemoveItem}
-                checkinDate={checkinDate}
-                numberOfPeople={numberOfPeople}
-                includeCleanupService={includeCleanupService}
-                setIncludeCleanupService={setIncludeCleanupService}
-                includeCleanupDishware={includeCleanupDishware}
-                setIncludeCleanupDishware={setIncludeCleanupDishware}
                 subtotal={subtotal}
                 gratuity={gratuity}
                 tax={tax}
@@ -269,7 +249,10 @@ export default function Home() {
       ) : view == 2 ? (
         <div className="bg-white max-w-[700px] mx-auto p-6 border border-gray-200 rounded-lg text-sm text-black mb-6">
           <div className="mb-6">
-            <a onClick={() => setView(1)} className="underline cursor-pointer">
+            <a
+              onClick={() => dispatch(setView(1))}
+              className="underline cursor-pointer"
+            >
               {"<"} Go back
             </a>
           </div>

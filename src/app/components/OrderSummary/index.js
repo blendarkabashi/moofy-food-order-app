@@ -1,15 +1,18 @@
 import { useState, useEffect } from "react";
+import CheckboxInput from "../shared/CheckboxInput";
+import TextInput from "../shared/TextInput";
+import { useSelector } from "react-redux";
+import { formatCurrency } from "@/app/data/globals";
+import {
+  removeItem,
+  setUser,
+  toggleCleanupDishware,
+  toggleCleanupService,
+} from "@/app/store";
+import { useDispatch } from "react-redux";
 
 export default function OrderSummary({
-  order,
   goToOverview,
-  onRemoveItem,
-  numberOfPeople,
-  checkinDate,
-  includeCleanupService,
-  setIncludeCleanupService,
-  includeCleanupDishware,
-  setIncludeCleanupDishware,
   subtotal,
   gratuity,
   tax,
@@ -17,33 +20,40 @@ export default function OrderSummary({
   cleanUpDishware,
   grandTotal,
 }) {
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [additionalNote, setAdditionalNote] = useState("");
+  const dispatch = useDispatch();
+  const cart = useSelector((state) => state.order.cart);
+  const user = useSelector((state) => state.order.user);
+  const checkinDate = useSelector((state) => state.order.checkinDate);
+  const numberOfPeople = useSelector((state) => state.order.numberOfPeople);
+  const includeCleanupService = useSelector(
+    (state) => state.order.includeCleanupService
+  );
+  const includeCleanupDishware = useSelector(
+    (state) => state.order.includeCleanupDishware
+  );
   const [emailError, setEmailError] = useState("");
   const [phoneError, setPhoneError] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   useEffect(() => {
     const isFormValid =
-      fullName &&
+      user.fullName &&
       checkinDate &&
       numberOfPeople > 0 &&
-      email &&
-      phone &&
+      user.email &&
+      user.phone &&
       !emailError &&
       !phoneError;
-    setIsButtonDisabled(!isFormValid || order.length === 0);
+    setIsButtonDisabled(!isFormValid || cart.length === 0);
   }, [
-    fullName,
+    user.fullName,
     numberOfPeople,
     checkinDate,
-    email,
-    phone,
+    user.email,
+    user.phone,
     emailError,
     phoneError,
-    order,
+    cart,
   ]);
 
   const validateEmail = (email) => {
@@ -59,17 +69,10 @@ export default function OrderSummary({
 
   const handlePhoneChange = (e) => {
     const formatted = formatPhoneNumber(e.target.value);
-    setPhone(formatted);
+    dispatch(setUser({ ...user, phone: formatted }));
     setPhoneError(
       /^\(\d{3}\) \d{3}-\d{4}$/.test(formatted) ? "" : "Invalid phone number"
     );
-  };
-
-  const formatCurrency = (value) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-    }).format(value);
   };
 
   return (
@@ -79,7 +82,7 @@ export default function OrderSummary({
       </h2>
 
       <div className="space-y-3">
-        {order?.map((item, index) => (
+        {cart?.map((item, index) => (
           <div key={index} className="flex justify-between items-center group">
             <span className="text-gray-700">
               {item.name}{" "}
@@ -90,7 +93,7 @@ export default function OrderSummary({
                 {formatCurrency(item.price * item.quantity)}
               </span>
               <button
-                onClick={() => onRemoveItem(item)}
+                onClick={() => dispatch(removeItem({ item }))}
                 className="transition-opacity text-red-500 hover:text-red-700"
                 title="Remove item"
               >
@@ -101,7 +104,7 @@ export default function OrderSummary({
         ))}
       </div>
 
-      {order?.length > 0 && <hr className="my-4 border-gray-300" />}
+      {cart?.length > 0 && <hr className="my-4 border-gray-300" />}
 
       <div className="space-y-2 text-gray-700">
         <div className="flex justify-between">
@@ -124,10 +127,9 @@ export default function OrderSummary({
             <span className="font-medium mr-3">
               {formatCurrency(cleanUpService)}
             </span>
-            <input
-              type="checkbox"
+            <CheckboxInput
               checked={includeCleanupService}
-              onChange={(e) => setIncludeCleanupService(!includeCleanupService)}
+              onChange={(e) => dispatch(toggleCleanupService())}
               className="w-5 h-5"
             />
           </div>
@@ -140,12 +142,9 @@ export default function OrderSummary({
             <span className="font-medium mr-3">
               {formatCurrency(cleanUpDishware)}
             </span>
-            <input
-              type="checkbox"
+            <CheckboxInput
               checked={includeCleanupDishware}
-              onChange={(e) =>
-                setIncludeCleanupDishware(!includeCleanupDishware)
-              }
+              onChange={(e) => dispatch(toggleCleanupDishware())}
               className="w-5 h-5"
             />
           </div>
@@ -164,11 +163,11 @@ export default function OrderSummary({
           <label className="block mb-1 text-gray-700 text-sm font-medium">
             Full Name<span className="text-red-500">*</span>
           </label>
-          <input
-            type="text"
-            value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          <TextInput
+            value={user.fullName}
+            onChange={(e) =>
+              dispatch(setUser({ ...user, fullName: e.target.value }))
+            }
             placeholder="Enter your full name"
           />
         </div>
@@ -176,14 +175,13 @@ export default function OrderSummary({
           <label className="block mb-1 text-gray-700 text-sm font-medium">
             Email<span className="text-red-500">*</span>
           </label>
-          <input
+          <TextInput
             type="email"
-            value={email}
+            value={user.email}
             onChange={(e) => {
-              setEmail(e.target.value);
+              dispatch(setUser({ ...user, email: e.target.value }));
               validateEmail(e.target.value);
             }}
-            className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
             placeholder="Enter your email"
           />
           {emailError && (
@@ -194,11 +192,10 @@ export default function OrderSummary({
           <label className="block mb-1 text-gray-700 text-sm font-medium">
             Phone Number<span className="text-red-500">*</span>
           </label>
-          <input
+          <TextInput
             type="tel"
-            value={phone}
+            value={user.phone}
             onChange={handlePhoneChange}
-            className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
             placeholder="(123) 456-7890"
           />
           {phoneError && (
@@ -210,8 +207,10 @@ export default function OrderSummary({
             Add any additional note (Optional){" "}
           </label>
           <textarea
-            value={additionalNote}
-            onChange={(e) => setAdditionalNote(e.target.value)}
+            value={user.additionalNote}
+            onChange={(e) =>
+              dispatch(setUser({ ...user, additionalNote: e.target.value }))
+            }
             className="min-w-full md:min-h-[80px] p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
             placeholder="Additional note"
           />
@@ -222,7 +221,7 @@ export default function OrderSummary({
         className={`${
           isButtonDisabled && "opacity-60 pointer-events-none"
         } cursor-pointer w-full bg-blue-600 py-2 mt-6 rounded-lg text-white font-semibold hover:bg-blue-700 transition`}
-        onClick={() => goToOverview(fullName, email, phone, additionalNote)}
+        onClick={() => goToOverview()}
         disabled={isButtonDisabled}
       >
         Checkout & Review

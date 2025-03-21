@@ -1,56 +1,24 @@
 import { useEffect, useState } from "react";
+import QuantityInput from "../shared/QuantityInput";
+import CheckboxInput from "../shared/CheckboxInput";
+import { menuData } from "@/app/data/globals";
+import { useSelector, useDispatch } from "react-redux";
+import { setCart, updateQuantity } from "@/app/store";
 
-export default function FoodOrderForm({
-  menuState,
-  cart,
-  setCart,
-  numberOfPeople,
-}) {
+export default function FoodOrderForm() {
+  const dispatch = useDispatch();
+  const cart = useSelector((state) => state.order.cart);
+  const numberOfPeople = useSelector((state) => state.order.numberOfPeople);
+
   const [mealSelected, setMealSelected] = useState([]);
-
-  const updateQuantity = (dayId, mealId, item, isAddon, newQuantity) => {
-    if (newQuantity < 0) return;
-
-    setCart((prevCart) => {
-      const existingItemIndex = prevCart.findIndex(
-        (cartItem) =>
-          cartItem.dayId === dayId &&
-          cartItem.mealId === mealId &&
-          cartItem.itemId === item.id &&
-          cartItem.isAddon === isAddon
-      );
-
-      if (newQuantity === 0) {
-        return existingItemIndex !== -1
-          ? prevCart.filter((_, index) => index !== existingItemIndex)
-          : prevCart;
-      }
-
-      const cartItem = {
-        dayId,
-        mealId,
-        itemId: item.id,
-        name: item.name,
-        price: item.price,
-        quantity: newQuantity,
-        isAddon,
-      };
-
-      if (existingItemIndex !== -1) {
-        return prevCart.map((item, index) =>
-          index === existingItemIndex ? cartItem : item
-        );
-      }
-
-      return [...prevCart, cartItem];
-    });
-  };
 
   const handleMealChange = (dayId, mealId, isChecked) => {
     if (!isChecked) {
-      setCart((prevCart) =>
-        prevCart.filter(
-          (item) => !(item.dayId === dayId && item.mealId === mealId)
+      dispatch(
+        setCart(
+          cart.filter(
+            (item) => !(item.dayId === dayId && item.mealId === mealId)
+          )
         )
       );
     }
@@ -69,61 +37,42 @@ export default function FoodOrderForm({
         : [...prevState, mealIdentifier];
     });
   };
-
   useEffect(() => {
     if (!numberOfPeople || numberOfPeople < 1) return;
+    let updatedCart = [...cart];
 
-    setCart((prevCart) => {
-      let updatedCart = [...prevCart];
+    mealSelected.forEach(({ dayId, mealId }) => {
+      const selectedMeal = menuData
+        .find((day) => day.id === dayId)
+        ?.meals.find((meal) => meal.id === mealId);
 
-      mealSelected.forEach(({ dayId, mealId }) => {
-        const selectedMeal = menuState
-          .find((day) => day.id === dayId)
-          ?.meals.find((meal) => meal.id === mealId);
+      if (!selectedMeal) return;
 
-        if (!selectedMeal) return;
+      selectedMeal.items.forEach((item) => {
+        const existingItemIndex = updatedCart.findIndex(
+          (cartItem) => cartItem.itemId === item.id
+        );
 
-        selectedMeal.items.forEach((item) => {
-          const existingItemIndex = updatedCart.findIndex(
-            (cartItem) =>
-              cartItem.dayId === dayId &&
-              cartItem.mealId === mealId &&
-              cartItem.itemId === item.id &&
-              !cartItem.isAddon
-          );
+        const newCartItem = {
+          dayId,
+          mealId,
+          itemId: item.id,
+          name: item.name,
+          price: item.price,
+          description: item.description ?? null,
+          quantity: numberOfPeople,
+          isAddon: false,
+        };
 
-          const newCartItem = {
-            dayId,
-            mealId,
-            itemId: item.id,
-            name: item.name,
-            price: item.price,
-            quantity: numberOfPeople,
-            isAddon: false,
-          };
-
-          if (existingItemIndex !== -1) {
-            updatedCart[existingItemIndex] = newCartItem;
-          } else {
-            updatedCart.push(newCartItem);
-          }
-        });
+        if (existingItemIndex !== -1) {
+          updatedCart[existingItemIndex] = newCartItem;
+        } else {
+          updatedCart.push(newCartItem);
+        }
       });
-
-      return updatedCart;
     });
+    dispatch(setCart(updatedCart));
   }, [numberOfPeople, mealSelected]);
-
-  const getItemQuantity = (dayId, mealId, itemId, isAddon) => {
-    const cartItem = cart.find(
-      (item) =>
-        item.dayId === dayId &&
-        item.mealId === mealId &&
-        item.itemId === itemId &&
-        item.isAddon === isAddon
-    );
-    return cartItem?.quantity || 0;
-  };
 
   const isMealSelected = (meal) => {
     return mealSelected.some(
@@ -133,12 +82,12 @@ export default function FoodOrderForm({
   };
 
   useEffect(() => {
-    console.log("Cart:", cart);
+    console.log(cart);
   }, [cart]);
 
   return (
     <div className="w-full space-y-6 text-black">
-      {menuState.map((day) => (
+      {menuData.map((day) => (
         <div
           key={day.id}
           className="bg-white p-6 border border-gray-200 rounded-lg"
@@ -150,8 +99,7 @@ export default function FoodOrderForm({
           {day.meals.map((meal) => (
             <div key={meal.id} className="mb-6 last:mb-0">
               <div className="flex items-center">
-                <input
-                  type="checkbox"
+                <CheckboxInput
                   checked={isMealSelected(meal)}
                   onChange={(e) =>
                     handleMealChange(meal.day_id, meal.id, e.target.checked)
@@ -181,75 +129,37 @@ export default function FoodOrderForm({
                         )}
                       </div>
                       <div className="flex items-center">
-                        <span className="font-medium mr-6">
-                          ${item.price.toFixed(2)}
-                        </span>
-                        <div className="flex items-center">
-                          <button
-                            onClick={() =>
-                              updateQuantity(
-                                meal.day_id,
-                                meal.id,
-                                item,
-                                false,
-                                getItemQuantity(
-                                  meal.day_id,
-                                  meal.id,
-                                  item.id,
-                                  false
-                                ) - 1
-                              )
-                            }
-                            className="px-3 py-1 bg-gray-200 text-gray-700 rounded-l hover:bg-gray-300"
-                          >
-                            -
-                          </button>
-                          <input
-                            type="number"
-                            min="0"
-                            value={getItemQuantity(
-                              meal.day_id,
-                              meal.id,
-                              item.id,
-                              false
-                            )}
-                            onChange={(e) =>
-                              updateQuantity(
-                                meal.day_id,
-                                meal.id,
-                                item,
-                                false,
-                                parseInt(e.target.value.replace(/^0+/, "")) || 0
-                              )
-                            }
-                            onInput={(e) => {
-                              e.target.value = e.target.value.replace(
-                                /^0+/,
-                                ""
-                              );
-                            }}
-                            className="w-14 text-center bg-gray-100 border border-gray-300 px-2 py-1"
-                          />
-                          <button
-                            onClick={() =>
-                              updateQuantity(
-                                meal.day_id,
-                                meal.id,
-                                item,
-                                false,
-                                getItemQuantity(
-                                  meal.day_id,
-                                  meal.id,
-                                  item.id,
-                                  false
-                                ) + 1
-                              )
-                            }
-                            className="px-3 py-1 bg-gray-200 text-gray-700 rounded-r hover:bg-gray-300"
-                          >
-                            +
-                          </button>
-                        </div>
+                        {item.price == 0 ? (
+                          <span className="font-medium pl-40 text-right">
+                            Included
+                          </span>
+                        ) : (
+                          <>
+                            <span className="font-medium mr-6">
+                              ${item.price.toFixed(2)}
+                            </span>
+                            <QuantityInput
+                              onUpdate={(newQuantity) => {
+                                dispatch(
+                                  updateQuantity({
+                                    item,
+                                    newQuantity,
+                                    mealId: meal.id,
+                                    dayId: day.id,
+                                    isAddon: true,
+                                  })
+                                );
+                              }}
+                              meal={meal}
+                              item={item}
+                              value={
+                                cart.find(
+                                  (cartItem) => cartItem.itemId === item.id
+                                )?.quantity || 0
+                              }
+                            />
+                          </>
+                        )}
                       </div>
                     </div>
                   ))}
@@ -269,74 +179,27 @@ export default function FoodOrderForm({
                             <span className="font-medium mr-6">
                               ${addon.price.toFixed(2)}
                             </span>
-                            <div className="flex items-center">
-                              <button
-                                onClick={() =>
-                                  updateQuantity(
-                                    meal.day_id,
-                                    meal.id,
-                                    addon,
-                                    true,
-                                    getItemQuantity(
-                                      meal.day_id,
-                                      meal.id,
-                                      addon.id,
-                                      true
-                                    ) - 1
-                                  )
-                                }
-                                className="px-3 py-1 bg-gray-200 text-gray-700 rounded-l hover:bg-gray-300"
-                              >
-                                -
-                              </button>
-                              <input
-                                type="number"
-                                value={getItemQuantity(
-                                  meal.day_id,
-                                  meal.id,
-                                  addon.id,
-                                  true
-                                )}
-                                min="0"
-                                onChange={(e) =>
-                                  updateQuantity(
-                                    meal.day_id,
-                                    meal.id,
-                                    addon,
-                                    true,
-                                    parseInt(
-                                      e.target.value.replace(/^0+/, "")
-                                    ) || 0
-                                  )
-                                }
-                                onInput={(e) => {
-                                  e.target.value = e.target.value.replace(
-                                    /^0+/,
-                                    ""
-                                  );
-                                }}
-                                className="w-14 text-center bg-gray-100 border border-gray-300 px-2 py-1"
-                              />
-                              <button
-                                onClick={() =>
-                                  updateQuantity(
-                                    meal.day_id,
-                                    meal.id,
-                                    addon,
-                                    true,
-                                    getItemQuantity(
-                                      meal.day_id,
-                                      meal.id,
-                                      addon.id,
-                                      true
-                                    ) + 1
-                                  )
-                                }
-                                className="px-3 py-1 bg-gray-200 text-gray-700 rounded-r hover:bg-gray-300"
-                              >
-                                +
-                              </button>
-                            </div>
+                            <QuantityInput
+                              onUpdate={(newQuantity) =>
+                                dispatch(
+                                  updateQuantity({
+                                    item: addon,
+                                    newQuantity,
+                                    mealId: meal.id,
+                                    dayId: day.id,
+                                    isAddon: true,
+                                  })
+                                )
+                              }
+                              meal={meal}
+                              item={addon}
+                              isAddon={true}
+                              value={
+                                cart.find(
+                                  (cartItem) => cartItem.itemId === addon.id
+                                )?.quantity || 0
+                              }
+                            />
                           </div>
                         </div>
                       ))}
