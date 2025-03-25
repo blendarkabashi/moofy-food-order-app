@@ -179,7 +179,12 @@ export default function Home() {
         <>
           <div className="bg-white p-6 border border-gray-200 rounded-lg text-sm text-black mb-6">
             <img className="w-[100px] mx-auto mb-4" src="/logo.avif"></img>
-            <h1 className="text-lg font-bold mb-2 text-black">E-Catering</h1>
+            <h1 className="text-lg font-bold mb-2 text-black">
+              E-Catering{" "}
+              <span className="text-red-500 font-bold text-sm ml-1">
+                - 72 hours in advance (after payment is received)
+              </span>
+            </h1>
             In order to provide the most affordable meal options for our guests,
             we have partnered with local restaurants to provide delivery food
             service. Our staff will pickup or coordinate deliver to your door
