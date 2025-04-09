@@ -11,6 +11,7 @@ export default function FoodOrderForm() {
   const numberOfPeople = useSelector((state) => state.order.numberOfPeople);
 
   const [mealSelected, setMealSelected] = useState([]);
+  const [lastSelectedMeal, setLastSelectedMeal] = useState(null);
 
   const handleMealChange = (dayId, mealId, isChecked) => {
     if (!isChecked) {
@@ -21,6 +22,8 @@ export default function FoodOrderForm() {
           )
         )
       );
+    } else {
+      setLastSelectedMeal({ dayId, mealId });
     }
     setMealSelected((prevState) => {
       const mealIdentifier = { dayId, mealId };
@@ -37,23 +40,24 @@ export default function FoodOrderForm() {
         : [...prevState, mealIdentifier];
     });
   };
+
   useEffect(() => {
-    if (!numberOfPeople || numberOfPeople < 1) return;
+    if (!numberOfPeople || numberOfPeople < 1 || !lastSelectedMeal) return;
+
+    const { dayId, mealId } = lastSelectedMeal;
+    const selectedMeal = menuData
+      .find((day) => day.id === dayId)
+      ?.meals.find((meal) => meal.id === mealId);
+
+    if (!selectedMeal) return;
+
     let updatedCart = [...cart];
 
-    mealSelected.forEach(({ dayId, mealId }) => {
-      const selectedMeal = menuData
-        .find((day) => day.id === dayId)
-        ?.meals.find((meal) => meal.id === mealId);
+    selectedMeal.items.forEach((item) => {
+      const existingItem = cart.find((cartItem) => cartItem.itemId === item.id);
 
-      if (!selectedMeal) return;
-
-      selectedMeal.items.forEach((item) => {
-        const existingItemIndex = updatedCart.findIndex(
-          (cartItem) => cartItem.itemId === item.id
-        );
-
-        const newCartItem = {
+      if (!existingItem) {
+        updatedCart.push({
           dayId,
           mealId,
           itemId: item.id,
@@ -62,17 +66,13 @@ export default function FoodOrderForm() {
           description: item.description ?? null,
           quantity: numberOfPeople,
           isAddon: false,
-        };
-
-        if (existingItemIndex !== -1) {
-          updatedCart[existingItemIndex] = newCartItem;
-        } else {
-          updatedCart.push(newCartItem);
-        }
-      });
+        });
+      }
     });
+
     dispatch(setCart(updatedCart));
-  }, [numberOfPeople, mealSelected]);
+    setLastSelectedMeal(null);
+  }, [numberOfPeople, lastSelectedMeal]);
 
   const isMealSelected = (meal) => {
     return mealSelected.some(
