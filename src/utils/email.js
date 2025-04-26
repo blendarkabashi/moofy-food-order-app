@@ -6,7 +6,7 @@ export const sendOrderEmail = async (user, cart, totals) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        to: [user.email, "zana@moofy.com"],
+        to: [user.email, "ecatering@moofy.com"],
         subject: "New Order Confirmation",
         html: totals.htmlContent,
       }),
